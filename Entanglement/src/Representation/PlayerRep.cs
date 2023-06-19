@@ -34,7 +34,7 @@ namespace Entanglement.Representation
         // A value of 10 is smooth, and with no acceleration value it looks best.
         public static float legJitter = 10f;
 
-        public static Dictionary<long, PlayerRepresentation> representations = new Dictionary<long, PlayerRepresentation>();
+        public static Dictionary<ulong, PlayerRepresentation> representations = new Dictionary<ulong, PlayerRepresentation>();
 
         public static Transform[] syncedPoints = new Transform[3];
         public static Transform syncedRoot;
