@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Entanglement.Data;
 using Entanglement.Extensions;
 using Entanglement.Objects;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -31,13 +32,20 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
+
             int index = 0;
-            long userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
 
             ushort objectId = BitConverter.ToUInt16(message.messageData, index);
             index += sizeof(ushort);
@@ -54,18 +62,12 @@ namespace Entanglement.Network
                     syncable.DequeueOwner(userId);
                 }
             }
-
-            if (Server.instance != null)
-            {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessage(NetworkChannel.Object, msgBytes);
-            }
         }
     }
 
     public class TransformQueueMessageData : NetworkMessageData
     {
-        public long userId;
+        public ulong userId;
         public ushort objectId;
         public bool isAdd;
     }

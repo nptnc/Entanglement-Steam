@@ -529,6 +529,7 @@
     <Compile Include="src\Modularity\ModuleHandler.cs" />
     <Compile Include="src\Modularity\ModuleInfo.cs" />
     <Compile Include="src\Modularity\ModuleLogger.cs" />
+    <Compile Include="src\Network\ByteBuffer.cs" />
     <Compile Include="src\Network\Messages\Arena\Fantasy Arena\FantasyChallengeMessage.cs" />
     <Compile Include="src\Network\Messages\Arena\Fantasy Arena\FantasyDifficultyMessage.cs" />
     <Compile Include="src\Network\Messages\Arena\Fantasy Arena\FantasyEnemyCountMessage.cs" />
@@ -556,16 +557,16 @@
     <Compile Include="src\Network\Messages\Representation\GripRadiusMessage.cs" />
     <Compile Include="src\Network\Messages\Attacks\GunShotMessage.cs" />
     <Compile Include="src\Network\Messages\Representation\HandPoseChangeMessage.cs" />
-    <Compile Include="src\Network\Messages\Server\HeartbeatMessage.cs" />
     <Compile Include="src\Network\Messages\Server\LevelChangeMessage.cs" />
     <Compile Include="src\Network\Messages\Attacks\PowerPunchMessage.cs" />
     <Compile Include="src\Network\Messages\Attacks\PlayerAttackMessage.cs" />
     <Compile Include="src\Network\Messages\Representation\PlayerRepSyncMessage.cs" />
-    <Compile Include="src\Network\Messages\Server\ShortIdMessage.cs" />
+    <Compile Include="src\Network\Messages\Server\RegistrationMessage.cs" />
     <Compile Include="src\Network\Messages\Server\SpawnObjectMessage.cs" />
     <Compile Include="src\Data\Containers\DataCorruptionException.cs" />
     <Compile Include="src\Network\Net.cs" />
     <Compile Include="src\Network\NetworkMessageTypes.cs" />
+    <Compile Include="src\Network\NetworkSender.cs" />
     <Compile Include="src\Network\Nodes\Client.cs" />
     <Compile Include="src\Network\Nodes\Node.cs" />
     <Compile Include="src\Network\PlayerId\PlayerId.cs" />

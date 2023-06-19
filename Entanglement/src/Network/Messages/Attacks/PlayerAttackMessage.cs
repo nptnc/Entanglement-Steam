@@ -28,7 +28,7 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
@@ -50,6 +50,8 @@ namespace Entanglement.Network
                         break;
                 }
             }
+
+            // TODO: CONVERT TO RELAYABLE MESSAGE
         }
     }
 

@@ -12,6 +12,7 @@ using StressLevelZero.Pool;
 using Entanglement.Data;
 using Entanglement.Representation;
 using Entanglement.Extensions;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -48,14 +49,21 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
             int index = 0;
             // User
-            long userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, userId);
+                return;
+            }
             //Cartridge
             Cart cartridgeType = (Cart)message.messageData[index++];
             // Type
@@ -97,17 +105,11 @@ namespace Entanglement.Network
                 bulletTransform.Apply(rep.repGunSFX.transform);
                 rep.repGunSFX.GunShot();
             }
-
-            if (Server.instance != null)
-            {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Attack, msgBytes, userId);
-            }
         }
     }
 
     public class GunShotMessageData : NetworkMessageData {
-        public long userId;
+        public ulong userId;
         public BulletObject bulletObject;
         public SimplifiedTransform bulletTransform;
     }

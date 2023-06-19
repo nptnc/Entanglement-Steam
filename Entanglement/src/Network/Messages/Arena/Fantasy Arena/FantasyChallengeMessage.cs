@@ -10,6 +10,7 @@ using StressLevelZero.Arena;
 using Entanglement.Patching;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -26,10 +27,17 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
+
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
 
             Arena_GameManager instance = Arena_GameManager.instance;
             if (instance) {
@@ -40,10 +48,7 @@ namespace Entanglement.Network
                 challenge.profile.isLocked = isLocked;
             }
 
-            if (Server.instance != null) {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Reliable, msgBytes, sender);
-            }
+            
         }
     }
 

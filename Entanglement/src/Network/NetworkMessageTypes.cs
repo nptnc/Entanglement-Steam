@@ -32,7 +32,7 @@
             FantasyCount = 25,
             FantasyDiff = 26,
             FantasyChal = 27,
-            ShortId = 28,
+            Registration = 28,
             MagazinePlug = 29,
             TransactionBegin = 30,
             TransactionWork = 31,

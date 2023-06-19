@@ -45,16 +45,16 @@ namespace Entanglement.Objects
             _PooleeLookup.Remove(id);
         }
 
-        public void OnSpawn(long ownerId, SimplifiedTransform simplifiedTransform) {
+        public void OnSpawn(ulong ownerId, SimplifiedTransform simplifiedTransform) {
             MelonCoroutines.Start(CoOnSpawn(ownerId, simplifiedTransform));
         }
 
-        public void SetOwner(long ownerId) {
+        public void SetOwner(ulong ownerId) {
             foreach (TransformSyncable sync in transforms)
                 sync.ForceOwner(ownerId, false);
         }
 
-        public IEnumerator CoOnSpawn(long ownerId, SimplifiedTransform simplifiedTransform) {
+        public IEnumerator CoOnSpawn(ulong ownerId, SimplifiedTransform simplifiedTransform) {
             gameObject.SetActive(false);
             yield return null;
             simplifiedTransform.Apply(transform);

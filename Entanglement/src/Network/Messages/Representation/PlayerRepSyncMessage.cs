@@ -11,6 +11,7 @@ using Entanglement.Representation;
 using Entanglement.Extensions;
 
 using StressLevelZero;
+using Oculus.Platform;
 
 namespace Entanglement.Network
 {
@@ -39,12 +40,20 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender) {
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
             int index = 0;
-            long userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(Steamworks.Data.SendType.Unreliable, msgBytes, userId);
+
+                return;
+            }
 
             if (PlayerRepresentation.representations.ContainsKey(userId)) {
                 PlayerRepresentation rep = PlayerRepresentation.representations[userId];
@@ -93,15 +102,12 @@ namespace Entanglement.Network
                 }
             }
 
-            if (Server.instance != null) {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Unreliable, msgBytes, userId);
-            }
+            
         }
     }
 
     public class PlayerRepSyncData : NetworkMessageData {
-        public long userId;
+        public ulong userId;
         public bool isGrounded;
         public SimplifiedTransform[] simplifiedTransforms = new SimplifiedTransform[3];
         public Vector3 rootPosition;

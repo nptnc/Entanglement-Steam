@@ -8,6 +8,7 @@ using UnityEngine;
 
 using Entanglement.Objects;
 using Entanglement.Network;
+using Steamworks.Data;
 
 namespace Entanglement.Extensions {
     public static class SyncUtilities {
@@ -17,7 +18,7 @@ namespace Entanglement.Extensions {
                 syncObj.SendEnqueue();
 
             else if (!rb.isKinematic) {
-                long ownerId = DiscordIntegration.currentUser.Id;
+                ulong ownerId = DiscordIntegration.localId.LargeId;
 
                 ushort? objectId = null;
                 ushort callbackIndex = 0;
@@ -44,7 +45,7 @@ namespace Entanglement.Extensions {
                 };
 
                 NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformCreate, createSync);
-                Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
             }
         }
 

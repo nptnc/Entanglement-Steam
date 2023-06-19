@@ -35,7 +35,7 @@ namespace Entanglement.Data
 
             reloadLevelOnDeath = playerHealth.reloadLevelOnDeath;
 
-            if (DiscordIntegration.hasLobby)
+            if (DiscordIntegration.hasServer)
                 playerHealth.reloadLevelOnDeath = false;
 
             PhysicsRig physicsRig = playerRig.physicsRig;

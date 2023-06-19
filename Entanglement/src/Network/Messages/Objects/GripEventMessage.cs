@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Entanglement.Data;
 using Entanglement.Extensions;
 using Entanglement.Objects;
-
+using Steamworks.Data;
 using StressLevelZero.Pool;
 
 using UnityEngine;
@@ -34,10 +34,17 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
+
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
 
             int index = 0;
             ushort objectId = BitConverter.ToUInt16(message.messageData, index);
@@ -53,12 +60,6 @@ namespace Entanglement.Network
 
                     syncObj.CallEvent(type, gripIdx);
                 }
-            }
-
-            if (Server.instance != null)
-            {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Reliable, msgBytes, sender);
             }
         }
     }

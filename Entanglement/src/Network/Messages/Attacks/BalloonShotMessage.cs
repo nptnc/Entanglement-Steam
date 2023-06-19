@@ -12,6 +12,7 @@ using BalloonColor = StressLevelZero.Props.Balloon.BalloonColor;
 using Entanglement.Representation;
 using Entanglement.Data;
 using Entanglement.Extensions;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -39,14 +40,22 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
             int index = 0;
             // User
-            long userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, userId);
+                return;
+            }
+
             // Color
             BalloonColor balloonColor = (BalloonColor)message.messageData[index++];
             // Spawn Effects
@@ -70,18 +79,12 @@ namespace Entanglement.Network
                 balloonTransform.Apply(rep.repBalloonSFX.transform);
                 rep.repBalloonSFX.GunShot();
             }
-
-            if (Server.instance != null)
-            {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Attack, msgBytes, userId);
-            }
         }
     }
 
     public class BalloonShotMessageData : NetworkMessageData
     {
-        public long userId;
+        public ulong userId;
         public BalloonColor balloonColor;
         public SimplifiedTransform balloonTransform;
     }

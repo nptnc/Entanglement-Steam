@@ -7,6 +7,7 @@ using System.IO;
 
 using Entanglement.Representation;
 using Entanglement.Network;
+using Steamworks.Data;
 
 namespace Entanglement.Compat.Playermodels
 {
@@ -20,11 +21,11 @@ namespace Entanglement.Compat.Playermodels
             NetworkMessage message = new NetworkMessage();
 
             byte[] utf8 = Encoding.UTF8.GetBytes(data.modelPath);
-            message.messageData = new byte[sizeof(byte) + sizeof(long) + utf8.Length];
+            message.messageData = new byte[sizeof(byte) + sizeof(ulong) + utf8.Length];
 
             int index = 0;
             byte[] userId = BitConverter.GetBytes(data.userId);
-            for (int i = 0; i < sizeof(long); i++)
+            for (int i = 0; i < sizeof(ulong); i++)
                 message.messageData[index++] = userId[i];
 
             message.messageData[index++] = Convert.ToByte(data.requestCallback);
@@ -35,29 +36,24 @@ namespace Entanglement.Compat.Playermodels
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
+
             int index = 0;
-            long userId = BitConverter.ToInt64(message.messageData, index);
-            index += sizeof(long);
+            ulong userId = BitConverter.ToUInt64(message.messageData, index);
+            index += sizeof(ulong);
 
             bool requestCallback = Convert.ToBoolean(message.messageData[index]);
             index += sizeof(byte);
-
-            if (requestCallback) {
-                // Send PlayerModel
-                if (PlayermodelsPatch.lastLoadedPath != null)
-                {
-                    string path = PlayermodelsPatch.lastLoadedPath;
-                    LoadCustomPlayerMessageData msgData = new LoadCustomPlayerMessageData();
-                    msgData.userId = DiscordIntegration.currentUser.Id;
-                    msgData.modelPath = Path.GetFileName(path);
-                    Node.activeNode.SendMessage(userId, NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.PlayerModel, msgData).GetBytes());
-                }
-            }
 
             if (PlayerRepresentation.representations.ContainsKey(userId))
             {
@@ -75,18 +71,12 @@ namespace Entanglement.Compat.Playermodels
                 else
                     PlayerSkinLoader.ApplyPlayermodel(rep, Path.Combine(PlayermodelsPatch.playerModelsPath, modelPath));
             }
-
-            if (Server.instance != null)
-            {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Reliable, msgBytes, userId);
-            }
         }
     }
 
     public class LoadCustomPlayerMessageData : NetworkMessageData
     {
-        public long userId;
+        public ulong userId;
         public bool requestCallback = false;
         public string modelPath;
     }

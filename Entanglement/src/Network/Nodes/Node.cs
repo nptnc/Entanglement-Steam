@@ -11,6 +11,11 @@ using Entanglement.Compat.Playermodels;
 using Entanglement.Objects;
 using Entanglement.Compat;
 using Entanglement.Data;
+using Oculus.Platform.Models;
+using Entanglement.src.Network;
+using Steamworks.Data;
+using Entanglement.src.Network.Steam;
+using Steamworks;
 
 namespace Entanglement.Network {
     public abstract class Node {
@@ -21,129 +26,70 @@ namespace Entanglement.Network {
 
         public static bool isServer => activeNode is Server;
 
-        public void ConnectToDiscordServer() {
-            DiscordIntegration.lobbyManager.ConnectNetwork(DiscordIntegration.lobby.Id);
 
-            // Opens all the network channels for sending messages
-            DiscordIntegration.lobbyManager.OpenNetworkChannel(DiscordIntegration.lobby.Id, (byte)NetworkChannel.Reliable, true);
-            DiscordIntegration.lobbyManager.OpenNetworkChannel(DiscordIntegration.lobby.Id, (byte)NetworkChannel.Unreliable, false);
-            DiscordIntegration.lobbyManager.OpenNetworkChannel(DiscordIntegration.lobby.Id, (byte)NetworkChannel.Attack, true);
-            DiscordIntegration.lobbyManager.OpenNetworkChannel(DiscordIntegration.lobby.Id, (byte)NetworkChannel.Object, true);
-            DiscordIntegration.lobbyManager.OpenNetworkChannel(DiscordIntegration.lobby.Id, (byte)NetworkChannel.Transaction, true);
-
-            DiscordIntegration.UpdateVoice(DiscordIntegration.voiceStatus);
+        public void ConnectToServer(ulong steamId) {
+            NetworkSender.clientSocket = SteamNetworkingSockets.ConnectRelay<ClientSocket>(steamId);
         }
 
-        public void ConnectToServer(ulong SteamId) {
-            
+        public void OnUserRegistered(PlayerId playerId) {
+            CreatePlayerRep(playerId);
         }
 
-        public void OnDiscordUserJoined(long lobbyId, long userId) {
-            CreatePlayerRep(userId);
-
-            // Send PlayerModel
-            if (PlayermodelsPatch.lastLoadedPath != null) {
-                string path = PlayermodelsPatch.lastLoadedPath;
-                LoadCustomPlayerMessageData msgData = new LoadCustomPlayerMessageData();
-                msgData.userId = DiscordIntegration.currentUser.Id;
-                msgData.modelPath = Path.GetFileName(path);
-                msgData.requestCallback = true;
-                SendMessage(userId, NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.PlayerModel, msgData).GetBytes());
-            }
-            UserConnectedEvent(lobbyId, userId);
-        }
-
-        public void OnDiscordUserLeft(PlayerId playerId) {
+        public void OnUserLeft(PlayerId playerId) {
             EntangleNotif.PlayerLeave($"{PlayerRepresentation.representations[playerId.LargeId].playerName}");
 
             PlayerRepresentation.representations[playerId.LargeId].DeleteRepresentations();
             PlayerRepresentation.representations.Remove(playerId.LargeId);
-            // TODO: REMOVE CONNECTED USERS!
-            DiscordIntegration.RemoveUser(playerId.LargeId);
-
-            UserDisconnectEvent(lobbyId, playerId.LargeId);
+            NetworkSender.connections.Remove(playerId.LargeId);
+            PlayerIds.Dispose(playerId);
         }
 
-        public void CreatePlayerRep(long userId)
+        public static void CreatePlayerRep(PlayerId playerId)
         {
-            if (connectedUsers.Contains(userId))
+            if (PlayerIds.GetPlayerFromLargeId(playerId.LargeId) != null)
                 return;
 
-            connectedUsers.Add(userId);
-            DiscordIntegration.userManager.GetUser(userId, OnDiscordUserFetched);
+            PlayerRepresentation.representations.Add(playerId.LargeId, new PlayerRepresentation(playerId.Username, playerId.LargeId));
+            EntangleNotif.PlayerJoin($"{playerId.Username}");
         }
 
         public void CleanData() {
-            connectedUsers.Clear();
-            userDatas.Clear();
+            NetworkSender.connections.Clear();
+            PlayerIds.ClearAll();
             ObjectSync.OnCleanup();
 
             foreach (PlayerRepresentation playerRep in PlayerRepresentation.representations.Values)
                 playerRep.DeleteRepresentations();
 
             PlayerRepresentation.representations.Clear();
-            DiscordIntegration.byteIds.Clear();
-            DiscordIntegration.localByteId = 0;
-            DiscordIntegration.lastByteId = 1;
 
             if (PlayerScripts.playerHealth)
                 PlayerScripts.playerHealth.reloadLevelOnDeath = PlayerScripts.reloadLevelOnDeath;
 
-            DiscordIntegration.lobbyManager.OnNetworkMessage -= OnDiscordMessageRecieved;
-            DiscordIntegration.lobbyManager.OnMemberConnect -= OnDiscordUserJoined;
-            DiscordIntegration.lobbyManager.OnMemberDisconnect -= OnDiscordUserLeft;
-
             CleanupEvent();
         }
 
-        public void OnDiscordUserFetched(Result result, ref User user) {
-            PlayerRepresentation.representations.Add(user.Id, new PlayerRepresentation(user.Username, user.Id));
-            userDatas.Add(user.Id, user);
-
-            EntangleNotif.PlayerJoin($"{user.Username}");
-        }
-
-        public void OnDiscordMessageRecieved(long lobbyId, long userId, byte channelId, byte[] data)
-        {
-            if (data.Length <= 0) // Idk
-                throw new Exception("Data was invalid!");
-
-            NetworkMessage message = new NetworkMessage();
-
-            message.messageType = data[0];
-            message.messageData = new byte[data.Length - sizeof(byte)];
-
-            for (int b = sizeof(byte); b < data.Length; b++)
-                message.messageData[b - sizeof(byte)] = data[b];
-
-            recievedByteCount += (uint)data.Length;
-            NetworkMessage.ReadMessage(message, userId);
-        }
-
-        public void SendMessage(long userId, NetworkChannel channel, byte[] data) {
-            if (DiscordIntegration.lobby.Id != 0) { 
-                DiscordIntegration.lobbyManager.SendNetworkMessage(DiscordIntegration.lobby.Id, userId, (byte)channel, data);
+        public void SendMessage(ulong userId, SendType channel, byte[] data) {
+            if (DiscordIntegration.hasServer) {
+                NetworkSender.SendMessageToClient(userId, channel,  data);
                 sentByteCount += (uint)data.Length;
             }
         }
 
         // Sends to owner if client
         // Sends to all if server
-        public virtual void BroadcastMessage(NetworkChannel channel, byte[] data) { }
+        public virtual void BroadcastMessage(SendType channel, byte[] data) { }
 
         // Forces send in every direction (for P2P-like messages, lowers latency but not good for certain things!)
-        public void BroadcastMessageP2P(NetworkChannel channel, byte[] data) { 
-            connectedUsers.ForEach((user) => { SendMessage(user, channel, data); });
-
-            if (!isServer)
-                SendMessage(DiscordIntegration.lobby.OwnerId, channel, data);
+        public void BroadcastMessageP2P(SendType channel, byte[] data) { 
+            NetworkSender.BroadcastMessage(data, channel);
         }
 
-        public virtual void Tick() { }
-
-        public virtual void UserConnectedEvent(long lobbyId, long userId) { }
-
-        public virtual void UserDisconnectEvent(long lobbyId, long userId) { }
+        public virtual void Tick() {
+            NetworkSender.clientSocket?.Receive(255);
+            NetworkSender.serverSocket?.Receive(255);
+            SteamClient.RunCallbacks();
+        }
 
         public virtual void CleanupEvent() { }
 

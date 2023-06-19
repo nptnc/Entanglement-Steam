@@ -85,7 +85,7 @@ namespace Entanglement.UI {
             IEnumerable<User> users = DiscordIntegration.lobbyManager.GetMemberUsers(DiscordIntegration.lobby.Id);
 
             foreach (User user in users) {
-                if (user.Id == DiscordIntegration.currentUser.Id)
+                if (user.Id == DiscordIntegration.localId.Id)
                     continue;
 
                 AddUser(user);

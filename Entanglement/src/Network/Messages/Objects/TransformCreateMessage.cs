@@ -9,6 +9,7 @@ using Entanglement.Extensions;
 using Entanglement.Objects;
 
 using UnityEngine;
+using Steamworks.Data;
 
 #if DEBUG
 using MelonLoader;
@@ -47,13 +48,20 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
+
             int index = 0;
-            long ownerId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong ownerId = DiscordIntegration.GetLongId(message.messageData[index++]);
 
             ushort objectId = 0;
             ushort callbackIndex = 0;
@@ -140,18 +148,14 @@ namespace Entanglement.Network
                 };
 
                 NetworkMessage callbackMessage = NetworkMessage.CreateMessage((byte)BuiltInMessageType.IDCallback, idCallback);
-                Server.instance.SendMessage(ownerId, NetworkChannel.Object, callbackMessage.GetBytes());
-
-                // Send sync create to clients
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Object, msgBytes, ownerId);
+                Server.instance.SendMessage(ownerId, SendType.Reliable, callbackMessage.GetBytes());
             }
         }
     }
 
     public class TransformCreateMessageData : NetworkMessageData
     {
-        public long ownerId;
+        public ulong ownerId;
         public ushort objectId;
         public ushort callbackIndex;
         public short spawnIndex = -1; // Used as an identifier to work-around different uuids

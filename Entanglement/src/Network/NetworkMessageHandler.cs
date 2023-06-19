@@ -30,25 +30,25 @@ namespace Entanglement.Network
 
         // This is like super messy but i'll clean it up later
         // I'm not good at modular stuff - Lakatrazz
-        public void ReadMessage(NetworkMessage message, ulong sender) {
+        public void ReadMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
             if (SceneLoader.loading) {
                 if (Attributes.Contains(typeof(Net.SkipHandleOnLoading)))
                     return;
                 else if (Attributes.Contains(typeof(Net.HandleOnLoaded)))
-                    MelonCoroutines.Start(HandleOnLoaded(message, sender));
+                    MelonCoroutines.Start(HandleOnLoaded(message, sender, isServerHandled));
             }
             else
-                HandleMessage(message, sender);
+                HandleMessage(message, sender, isServerHandled);
         }
 
-        public IEnumerator HandleOnLoaded(NetworkMessage message, ulong sender) {
+        public IEnumerator HandleOnLoaded(NetworkMessage message, ulong sender, bool isServerHandled) {
             while (SceneLoader.loading)
                 yield return null;
 
-            HandleMessage(message, sender);
+            HandleMessage(message, sender, isServerHandled);
         }
 
-        public abstract void HandleMessage(NetworkMessage message, ulong sender);
+        public abstract void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled);
 
         public abstract NetworkMessage CreateMessage(NetworkMessageData data);
     }

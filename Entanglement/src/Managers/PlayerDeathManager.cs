@@ -8,6 +8,7 @@ using Entanglement.Representation;
 using UnityEngine;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Managers
 {
@@ -43,7 +44,7 @@ namespace Entanglement.Managers
             };
 
             NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.PlayerEvent, data);
-            Node.activeNode.BroadcastMessageP2P(NetworkChannel.Reliable, message.GetBytes());
+            Node.activeNode.BroadcastMessageP2P(SendType.Reliable, message.GetBytes());
 
 #if DEBUG
             if (PlayerRepresentation.debugRepresentation != null)

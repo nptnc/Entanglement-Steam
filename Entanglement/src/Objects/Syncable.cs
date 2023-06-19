@@ -13,9 +13,9 @@ namespace Entanglement.Objects
     public abstract class Syncable : MonoBehaviour {
         public Syncable(IntPtr intPtr) : base(intPtr) { }
 
-        public List<long> ownerQueue = new List<long>();
-        public long staleOwner = 0;
-        public long lastOwner = 0;
+        public List<ulong> ownerQueue = new List<ulong>();
+        public ulong staleOwner = 0;
+        public ulong lastOwner = 0;
 
         public ushort objectId = 0;
         public bool isValid = false;
@@ -45,13 +45,13 @@ namespace Entanglement.Objects
 
         protected abstract void UpdateOwner(bool checkForMag = true);
 
-        public virtual void EnqueueOwner(long owner) {
+        public virtual void EnqueueOwner(ulong owner) {
             if (!ownerQueue.Contains(owner)) ownerQueue.Add(owner);
             UpdateStale();
             UpdateOwner();
         }
 
-        public virtual void DequeueOwner(long owner) {
+        public virtual void DequeueOwner(ulong owner) {
             if (ownerQueue.Contains(owner)) ownerQueue.Remove(owner);
             UpdateStale();
             UpdateOwner();
@@ -63,14 +63,14 @@ namespace Entanglement.Objects
             staleOwner = 0;
         }
 
-        public virtual void TrySetStale(long owner) {
+        public virtual void TrySetStale(ulong owner) {
             lastOwner = staleOwner;
             if (ownerQueue.Count == 0) staleOwner = owner;
             else EnqueueOwner(owner);
             UpdateOwner();
         }
 
-        public virtual void ForceOwner(long owner, bool checkForMag = true) {
+        public virtual void ForceOwner(ulong owner, bool checkForMag = true) {
             lastOwner = staleOwner;
             ownerQueue.Clear();
             staleOwner = owner;
@@ -89,7 +89,7 @@ namespace Entanglement.Objects
         }
 
         public bool IsOwner() {
-            return staleOwner == DiscordIntegration.currentUser.Id;
+            return staleOwner == DiscordIntegration.localId.Id;
         }
     }
 }

@@ -14,6 +14,7 @@ using StressLevelZero.Data;
 using UnityEngine;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -46,15 +47,22 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
+
             byte[] transformBytes = new byte[SimplifiedTransform.size];
 
             int index = 0;
-            long userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
 
             ushort objectId = 0;
 
@@ -79,10 +87,10 @@ namespace Entanglement.Network
                 };
 
                 NetworkMessage callbackMessage = NetworkMessage.CreateMessage((byte)BuiltInMessageType.IDCallback, idCallback);
-                Server.instance.SendMessage(userId, NetworkChannel.Object, callbackMessage.GetBytes());
+                Server.instance.SendMessage(userId, SendType.Reliable, callbackMessage.GetBytes());
 
                 byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Object, msgBytes, userId);
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, userId);
             }
             else {
                 objectId = BitConverter.ToUInt16(message.messageData, index);
@@ -110,7 +118,7 @@ namespace Entanglement.Network
             MelonCoroutines.Start(RegisterAndSpawn(title, transform.position, transform.rotation.ExpandQuat(), objectId, userId));
         }
 
-        public static IEnumerator RegisterAndSpawn(string title, Vector3 position, Quaternion rotation, ushort objectId, long userId) {
+        public static IEnumerator RegisterAndSpawn(string title, Vector3 position, Quaternion rotation, ushort objectId, ulong userId) {
             SpawnableObject spawnable = SpawnableData.TryGetSpawnable(title);
 
             yield return null;
@@ -144,7 +152,7 @@ namespace Entanglement.Network
 
     public class SpawnMessageData : NetworkMessageData
     {
-        public long userId;
+        public ulong userId;
         public ushort objectId;
         public ushort callbackIndex;
         public string spawnableTitle;

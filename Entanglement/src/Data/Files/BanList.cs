@@ -9,12 +9,11 @@ using System.IO;
 using Entanglement.Extensions;
 
 using MelonLoader;
-
-using Discord;
+using Entanglement.Network;
 
 namespace Entanglement.Data {
     public static class BanList {
-        public static List<Tuple<long, string>> bannedUsers = new List<Tuple<long, string>>();
+        public static List<Tuple<ulong, string>> bannedUsers = new List<Tuple<ulong, string>>();
 
         public static string banlistPath;
 
@@ -52,8 +51,8 @@ namespace Entanglement.Data {
             if (document != null) {
                 document.Descendants("Ban").ForEach((element) => {
                     if (element.TryGetAttribute("id", out string rawId) && element.TryGetAttribute("name", out string userName)) {
-                        if (long.TryParse(rawId, out long id)) {
-                            bannedUsers.Add(new Tuple<long, string>(id, userName));
+                        if (ulong.TryParse(rawId, out ulong id)) {
+                            bannedUsers.Add(new Tuple<ulong, string>(id, userName));
                             EntangleLogger.Log($"Found banned id {id}", ConsoleColor.DarkRed);
                         }
                     }
@@ -88,21 +87,21 @@ namespace Entanglement.Data {
             File.WriteAllText(banlistPath, baseDoc.ToString());
         }
 
-        public static void BanUser(User user) {
-            var tuple = new Tuple<long, string>(user.Id, user.Username);
+        public static void BanUser(PlayerId playerId) {
+            var tuple = new Tuple<ulong, string>(playerId.LargeId, playerId.Username);
             if (!bannedUsers.Contains(tuple))
                 bannedUsers.Add(tuple);
 
-            EntangleLogger.Log($"Banned {user.Username}, id is {user.Id}!", ConsoleColor.DarkRed);
+            EntangleLogger.Log($"Banned {playerId.Username}, id is {playerId.LargeId}!", ConsoleColor.DarkRed);
             UpdateBanFile();
         }
 
-        public static void UnbanUser(User user) {
-            var tuple = new Tuple<long, string>(user.Id, user.Username);
+        public static void UnbanUser(PlayerId playerId) {
+            var tuple = new Tuple<ulong, string>(playerId.LargeId, playerId.Username);
             if (bannedUsers.Contains(tuple))
                 bannedUsers.Remove(tuple);
 
-            EntangleLogger.Log($"Unbanned {user.Username}, id is {user.Id}!", ConsoleColor.DarkCyan);
+            EntangleLogger.Log($"Unbanned {playerId.Username}, id is {playerId.LargeId}!", ConsoleColor.DarkCyan);
             UpdateBanFile();
         }
     }

@@ -28,7 +28,7 @@ namespace Entanglement.Patching
 
             GunShotMessageData shotData = new GunShotMessageData()
             {
-                userId = DiscordIntegration.currentUser.Id,
+                userId = DiscordIntegration.localId.Id,
                 bulletObject = bulletObject,
                 bulletTransform = new SimplifiedTransform(firePoint)
             };
@@ -48,7 +48,7 @@ namespace Entanglement.Patching
 
             BalloonShotMessageData balloonData = new BalloonShotMessageData()
             {
-                userId = DiscordIntegration.currentUser.Id,
+                userId = DiscordIntegration.localId.Id,
                 balloonColor = __instance.currentColor,
                 balloonTransform = new SimplifiedTransform(firePoint),
             };

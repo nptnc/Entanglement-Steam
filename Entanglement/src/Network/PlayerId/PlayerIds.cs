@@ -12,7 +12,20 @@ namespace Entanglement.Network
 {
     public static class PlayerIds
     {
-        private static List<PlayerId> playerIds = new List<PlayerId>();
+        public static List<PlayerId> playerIds = new List<PlayerId>();
+
+        public static byte TryGetAvailableSmallId() {
+            for (byte i = 0; i < 255; i++) {
+                if (GetPlayerFromSmallId(i) == null) {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        public static void ClearAll() { 
+            playerIds.Clear();
+        }
 
         public static void Dispose(PlayerId playerId) {
             // PlayerRepresentation rep = PlayerRepresentation.representations[playerId.LargeId];
@@ -21,11 +34,13 @@ namespace Entanglement.Network
             playerIds.Remove(playerId);
         }
 
-        public static void Add(ulong largeId, byte smallId, string userName) {
-            if (GetPlayerFromLargeId(largeId) == null)
-                return;
-            
-            playerIds.Add(new PlayerId(largeId,smallId,userName));
+        public static PlayerId Add(ulong largeId, byte smallId, string userName) {
+            if (GetPlayerFromLargeId(largeId) != null)
+                return null;
+
+            PlayerId playerId = new PlayerId(largeId, smallId, userName);
+            playerIds.Add(playerId);
+            return playerId;
         }
 
         public static PlayerId GetPlayerFromSmallId(byte SmallId) => playerIds.Where(id => id.SmallId == SmallId).FirstOrDefault();

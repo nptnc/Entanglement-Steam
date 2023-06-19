@@ -8,6 +8,7 @@ using System.IO;
 using MelonLoader;
 
 using Entanglement.Network;
+using Steamworks.Data;
 
 namespace Entanglement.Data {
     public class DataTransaction {
@@ -27,7 +28,7 @@ namespace Entanglement.Data {
 
         public string filePath;
         public uint offset = 0;
-        public long target = 0;
+        public ulong target = 0;
         public List<byte> bytes = new List<byte>();
 
         public const uint MAX_DATA_LENGTH = (uint)1e+9; // 1 GB is the limit
@@ -55,7 +56,7 @@ namespace Entanglement.Data {
 
         public static void Process() {
             if (Node.activeNode == null) return;
-            if (!DiscordIntegration.hasLobby) return;
+            if (!DiscordIntegration.hasServer) return;
             if (outgoingTransactions.Count() <= 0) return;
 
             DataTransaction outgoing = outgoingTransactions.Peek();
@@ -65,7 +66,7 @@ namespace Entanglement.Data {
                     TransactionBeginMessageData data = new TransactionBeginMessageData() { transaction = outgoing };
 
                     NetworkMessage msg = NetworkMessage.CreateMessage((byte)BuiltInMessageType.TransactionBegin, data);
-                    Node.activeNode.SendMessage(outgoing.target, NetworkChannel.Transaction, msg.GetBytes());
+                    Node.activeNode.SendMessage(outgoing.target, SendType.Reliable, msg.GetBytes());
 
                     outgoing.state = TransactionState.Waiting; // We wait for a confirm message to start sending data
 
@@ -80,7 +81,7 @@ namespace Entanglement.Data {
                     data.name = outgoing.filePath;
 
                     NetworkMessage msg = NetworkMessage.CreateMessage((byte)BuiltInMessageType.TransactionWork, data);
-                    Node.activeNode.SendMessage(outgoing.target, NetworkChannel.Transaction, msg.GetBytes());
+                    Node.activeNode.SendMessage(outgoing.target, SendType.Reliable, msg.GetBytes());
                 }
 
                 if (outgoing.state == TransactionState.Done) {

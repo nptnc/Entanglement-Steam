@@ -7,5 +7,7 @@ namespace Entanglement.Network {
             // TODO: send this playerid to the player who owns it
             // TODO: send every other playerid to this player
         }
+
+
     }
 }

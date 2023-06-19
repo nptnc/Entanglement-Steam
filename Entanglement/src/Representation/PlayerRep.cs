@@ -78,7 +78,7 @@ namespace Entanglement.Representation
         public Vector3 prevRepRootPos = Vector3.zero;
 
         public string playerName;
-        public long playerId;
+        public ulong playerId;
         public bool isGrounded;
 
 
@@ -95,7 +95,7 @@ namespace Entanglement.Representation
                 throw new NullReferenceException("playerRepBundle is null! Did you forget to compile the player bundle into the dll?");
         }
 
-        public PlayerRepresentation(string playerName, long playerId) {
+        public PlayerRepresentation(string playerName, ulong playerId) {
             this.playerName = playerName;
             this.playerId = playerId;
             RecreateRepresentations();
@@ -314,7 +314,7 @@ namespace Entanglement.Representation
 
             PlayerRepSyncData data = new PlayerRepSyncData();
 
-            data.userId = DiscordIntegration.currentUser.Id;
+            data.userId = DiscordIntegration.localId.Id;
 
             for (int r = 0; r < data.simplifiedTransforms.Length; r++) {
                 data.simplifiedTransforms[r].position = syncedPoints[r].position;

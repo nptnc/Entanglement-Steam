@@ -11,13 +11,12 @@ using ModThatIsNotMod.BoneMenu;
 
 using UnityEngine;
 
-using Discord;
-
 using MelonLoader;
 
 namespace Entanglement.UI
 {
-    public static class LobbiesUI {
+    // TODO: Convert to lobby system
+    /*public static class LobbiesUI {
         static MenuCategory lobbiesCategory;
 
         // First long is userid, second long is lobbyid
@@ -111,5 +110,5 @@ namespace Entanglement.UI
         }
 
         public static void UpdateMenu() => MenuManager.OpenCategory(lobbiesCategory);
-    }
+    }*/
 }

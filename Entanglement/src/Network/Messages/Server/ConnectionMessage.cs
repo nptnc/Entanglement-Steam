@@ -8,6 +8,8 @@ using System.IO;
 using MelonLoader;
 
 using Entanglement.Data;
+using Entanglement.src.Network;
+using Steamworks.Data;
 
 namespace Entanglement.Network {
     public class ConnectionMessageHandler : NetworkMessageHandler<ConnectionMessageData> {
@@ -16,23 +18,30 @@ namespace Entanglement.Network {
         public override NetworkMessage CreateMessage(ConnectionMessageData data) {
             NetworkMessage message = new NetworkMessage();
 
-            message.messageData = new byte[sizeof(ushort) + 16];
+            ByteBuffer byteBuffer = new ByteBuffer();
+            byteBuffer.WriteUShort(data.packedVersion);
+            byteBuffer.WriteULong(data.longId);
+            byteBuffer.WriteString(data.username);
 
-            int index = 0;
-
-            foreach (byte b in BitConverter.GetBytes(data.packedVersion))
-                message.messageData[index++] = b;
-
+            message.messageData = byteBuffer.GetBytes();
             return message;
         }
         
         // Connection messages are only handled by the server
-        public override void HandleMessage(NetworkMessage message, long sender) {
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
+            if (!isServerHandled) {
+                return;
+            }
+
             byte clientVersionMajor = message.messageData[0];
             byte clientVersionMinor = message.messageData[1];
+            ByteBuffer byteBuffer = new ByteBuffer(message.messageData);
+            byteBuffer.ReadUShort();
+            ulong longId = byteBuffer.ReadULong();
+            string username = byteBuffer.ReadString();
 
             bool isSameVersion = clientVersionMajor == EntanglementVersion.versionMajor && clientVersionMinor == EntanglementVersion.versionMinor;
 
@@ -51,12 +60,6 @@ namespace Entanglement.Network {
                     disconnectData.disconnectReason = (byte)DisconnectReason.OutdatedServer;
                 }
             }
-            else {
-                if (Server.instance.connectedUsers.Count >= Server.maxPlayers) {
-                    EntangleLogger.Log("A client was removed since the server is full!");
-                    disconnectData.disconnectReason = (byte)DisconnectReason.ServerFull;
-                }
-            }
 
             if (BanList.bannedUsers.Any(tuple => tuple.Item1 == sender))
                 disconnectData.disconnectReason = (byte)DisconnectReason.Banned;
@@ -64,12 +67,42 @@ namespace Entanglement.Network {
             if (disconnectData.disconnectReason != (byte)DisconnectReason.Unknown) {
                 EntangleLogger.Log($"Disconnecting sender for reason {Enum.GetName(typeof(DisconnectReason), disconnectData.disconnectReason)}...");
                 NetworkMessage disconnectMsg = NetworkMessage.CreateMessage((byte)BuiltInMessageType.Disconnect, disconnectData);
-                Server.instance?.SendMessage(sender, NetworkChannel.Reliable, disconnectMsg.GetBytes());
+                Server.instance?.SendMessage(sender, SendType.Reliable, disconnectMsg.GetBytes());
+                return;
             }
+
+            // They made it through the checks
+            LevelChangeMessageData levelChangeData = new LevelChangeMessageData() { sceneIndex = (byte) StressLevelZero.Utilities.BoneworksSceneManager.currentSceneIndex };
+            NetworkMessage levelChangeMessage = NetworkMessage.CreateMessage(BuiltInMessageType.LevelChange, levelChangeData);
+            Node.activeNode.SendMessage(sender, SendType.Reliable, levelChangeMessage.GetBytes());
+
+            foreach (PlayerId playerId in PlayerIds.playerIds)
+            {
+                RegistrationMessageData addMessageData = new RegistrationMessageData()
+                {
+                    userId = playerId.LargeId,
+                    byteId = playerId.SmallId,
+                    username = playerId.Username
+                };
+                NetworkMessage addMessage = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Registration, addMessageData);
+                Server.instance?.SendMessage(sender, SendType.Reliable, addMessage.GetBytes());
+            }
+
+            RegistrationMessageData idMessageData = new RegistrationMessageData()
+            {
+                userId = sender,
+                byteId = PlayerIds.TryGetAvailableSmallId(),
+                username = username
+            };
+
+            NetworkMessage idMessage = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Registration, idMessageData);
+            Server.instance?.BroadcastMessage(SendType.Reliable, idMessage.GetBytes());
         }
     }
 
     public class ConnectionMessageData : NetworkMessageData {
         public ushort packedVersion;
+        public string username;
+        public ulong longId;
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 using Entanglement.Patching;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -17,7 +18,15 @@ namespace Entanglement.Network
 
         public override NetworkMessage CreateMessage(EmptyMessageData data) => new NetworkMessage();
 
-        public override void HandleMessage(NetworkMessage message, long sender) {
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
+
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
+
             Zombie_GameControl instance = Zombie_GameControl.instance;
             if (instance) {
                 ZombieMode_Settings.m_invalidSettings = true;
@@ -29,11 +38,6 @@ namespace Entanglement.Network
                 parent.Find("LoadoutPage").gameObject.SetActive(false);
                 parent.Find("CustomModePage").gameObject.SetActive(false);
                 parent.Find("DifficultySelectPage").gameObject.SetActive(false);
-            }
-
-            if (Server.instance != null) {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Reliable, msgBytes, sender);
             }
         }
     }

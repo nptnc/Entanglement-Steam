@@ -33,9 +33,6 @@ namespace Entanglement.Modularity
         // Should be called using reflection
         public static void SetupModule(Assembly moduleAssembly)
         {
-            if (DiscordIntegration.isInvalid)
-                return;
-
             if (moduleAssembly != null)
             {
                 var moduleInfo = moduleAssembly.GetCustomAttribute<EntanglementModuleInfo>();

@@ -41,9 +41,13 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender) {
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
+
+            if (isServerHandled) {
+                return;
+            }
 
             if (Node.isServer) {
                 byte[] transformBytes = new byte[SimplifiedTransform.size];
@@ -110,10 +114,10 @@ namespace Entanglement.Network
                     {
                         ObjectSync.MoveSyncable(existingSync, thisId);
                         existingSync.ClearOwner();
-                        existingSync.TrySetStale(DiscordIntegration.lobby.OwnerId);
+                        existingSync.TrySetStale(PlayerIds.GetPlayerFromSmallId(0).LargeId);
                     }
                     else {
-                        TransformSyncable.CreateSync(DiscordIntegration.lobby.OwnerId, ComponentCacheExtensions.m_RigidbodyCache.GetOrAdd(go), thisId);
+                        TransformSyncable.CreateSync(PlayerIds.GetPlayerFromSmallId(0).LargeId, ComponentCacheExtensions.m_RigidbodyCache.GetOrAdd(go), thisId);
                     }
 
                     ObjectSync.lastId = thisId;

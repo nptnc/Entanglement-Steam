@@ -8,6 +8,7 @@ using StressLevelZero;
 
 using Entanglement.Representation;
 using Entanglement.Extensions;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -34,13 +35,20 @@ namespace Entanglement.Network
             return message;
         }
 
-        public override void HandleMessage(NetworkMessage message, long sender)
+        public override void HandleMessage(NetworkMessage message, ulong sender, bool isServerHandled)
         {
             if (message.messageData.Length <= 0)
                 throw new IndexOutOfRangeException();
 
+            if (isServerHandled)
+            {
+                byte[] msgBytes = message.GetBytes();
+                Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
+                return;
+            }
+
             int index = 0;
-            long userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
 
             if (PlayerRepresentation.representations.ContainsKey(userId))
             {
@@ -56,18 +64,12 @@ namespace Entanglement.Network
                     rep.UpdatePose(hand, poseIndex);
                 }
             }
-
-            if (Server.instance != null)
-            {
-                byte[] msgBytes = message.GetBytes();
-                Server.instance.BroadcastMessageExcept(NetworkChannel.Reliable, msgBytes, userId);
-            }
         }
     }
 
     public class HandPoseChangeMessageData : NetworkMessageData
     {
-        public long userId;
+        public ulong userId;
         public Handedness hand;
         public ushort poseIndex;
     }

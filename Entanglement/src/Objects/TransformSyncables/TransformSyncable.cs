@@ -83,7 +83,7 @@ namespace Entanglement.Objects
         public bool HasChangedPositions() => (transform.position - lastPosition).sqrMagnitude > 0.001f || Quaternion.Angle(transform.rotation, lastRotation) > 0.05f;
 
         protected override void UpdateOwner(bool checkForMag = true) {
-            if (lastOwner == DiscordIntegration.currentUser.Id) objectHealth = GetHealth();
+            if (lastOwner == DiscordIntegration.localId.Id) objectHealth = GetHealth();
 
             if (!IsOwner()) SetHealth(float.PositiveInfinity);
             else SetHealth(objectHealth);
@@ -107,7 +107,7 @@ namespace Entanglement.Objects
                 } catch { }
             }
 
-            if (_CachedPlug && lastOwner != staleOwner && staleOwner == DiscordIntegration.currentUser.Id) {
+            if (_CachedPlug && lastOwner != staleOwner && staleOwner == DiscordIntegration.localId.Id) {
                 Socket plugSocket = _CachedPlug._lastSocket;
                 if (_CachedPlug.InGun()) {
                     _CachedPlug.ForceEject();
@@ -148,7 +148,7 @@ namespace Entanglement.Objects
 
             Rigidbody[] rigidbodies = null;
 
-            long ownerId = DiscordIntegration.currentUser.Id;
+            long ownerId = DiscordIntegration.localId.Id;
 
             ObjectSync.GetPooleeData(targetObj, out rigidbodies, out string overrideRootName, out short spawnIndex, out float spawnTime);
 
@@ -209,7 +209,7 @@ namespace Entanglement.Objects
             }
         }
 
-        public static Syncable CreateSync(long owner, Rigidbody rigidbody = null, ushort? objectId = null) {
+        public static Syncable CreateSync(ulong owner, Rigidbody rigidbody = null, ushort? objectId = null) {
             if (!rigidbody)
                 return null;
 
@@ -257,7 +257,7 @@ namespace Entanglement.Objects
         public override void SendDequeue() => MelonCoroutines.Start(WaitUntilValid(OnValidDequeue));
 
         public void OnValidEnqueue() {
-            long userId = DiscordIntegration.currentUser.Id;
+            long userId = DiscordIntegration.localId.Id;
             if (ownerQueue.Contains(userId))
                 return;
 
@@ -276,7 +276,7 @@ namespace Entanglement.Objects
         }
 
         public void OnValidDequeue() {
-            long userId = DiscordIntegration.currentUser.Id;
+            long userId = DiscordIntegration.localId.Id;
             if (!ownerQueue.Contains(userId))
                 return;
 
@@ -302,7 +302,7 @@ namespace Entanglement.Objects
         }
 
         public void ApplyTransform(SimplifiedTransform simplifiedTransform) {
-            if (DiscordIntegration.currentUser.Id == staleOwner || (_CachedPlug && _CachedPlug.EnteringOrInside())) return;
+            if (DiscordIntegration.localId.Id == staleOwner || (_CachedPlug && _CachedPlug.EnteringOrInside())) return;
 
             if (targetBody) simplifiedTransform.Apply(targetBody);
             if (!rb) simplifiedTransform.Apply(transform);
