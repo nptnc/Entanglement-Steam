@@ -1,0 +1,9 @@
+{
+    "name": "Entanglement",
+    "version_number": "0.2.0",
+    "website_url": "https://gitlab.com/zCubed3/entanglement-public",
+    "description": "Entanglement - An alternative multiplayer mod for boneworks!",
+    "dependencies": [
+        "gnonme-ModThatIsNotMod-0.2.7"
+    ]
+}

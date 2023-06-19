@@ -1,0 +1,635 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{490E160D-251D-4AB4-A3BB-F473961FF8A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Entanglement</RootNamespace>
+    <AssemblyName>Entanglement</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>managed\Il2Cppmscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MelonLoader">
+      <HintPath>managed\MelonLoader.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ModThatIsNotMod">
+      <HintPath>dependencies\ModThatIsNotMod.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TextMeshPro-1.0.55.2017.2.0b12">
+      <HintPath>managed\TextMeshPro-1.0.55.2017.2.0b12.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnhollowerBaseLib">
+      <HintPath>managed\UnhollowerBaseLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnhollowerRuntimeLib">
+      <HintPath>managed\UnhollowerRuntimeLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Analytics.DataPrivacy">
+      <HintPath>managed\Unity.Analytics.DataPrivacy.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AccessibilityModule">
+      <HintPath>managed\UnityEngine.AccessibilityModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>managed\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>managed\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ARModule">
+      <HintPath>managed\UnityEngine.ARModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>managed\UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.BaselibModule">
+      <HintPath>managed\UnityEngine.BaselibModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ClothModule">
+      <HintPath>managed\UnityEngine.ClothModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterInputModule">
+      <HintPath>managed\UnityEngine.ClusterInputModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterRendererModule">
+      <HintPath>managed\UnityEngine.ClusterRendererModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CrashReportingModule">
+      <HintPath>managed\UnityEngine.CrashReportingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+      <HintPath>managed\UnityEngine.DirectorModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.FileSystemHttpModule">
+      <HintPath>managed\UnityEngine.FileSystemHttpModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.GameCenterModule">
+      <HintPath>managed\UnityEngine.GameCenterModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.GridModule">
+      <HintPath>managed\UnityEngine.GridModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.HotReloadModule">
+      <HintPath>managed\UnityEngine.HotReloadModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Il2CppAssetBundleManager">
+      <HintPath>managed\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Il2CppImageConversionManager">
+      <HintPath>managed\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>managed\UnityEngine.InputModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.LocalizationModule">
+      <HintPath>managed\UnityEngine.LocalizationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>managed\UnityEngine.Networking.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PerformanceReportingModule">
+      <HintPath>managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>managed\UnityEngine.Physics2DModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ProfilerModule">
+      <HintPath>managed\UnityEngine.ProfilerModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+      <HintPath>managed\UnityEngine.SharedInternalsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpatialTracking">
+      <HintPath>managed\UnityEngine.SpatialTracking.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteMaskModule">
+      <HintPath>managed\UnityEngine.SpriteMaskModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteShapeModule">
+      <HintPath>managed\UnityEngine.SpriteShapeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.StreamingModule">
+      <HintPath>managed\UnityEngine.StreamingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.StyleSheetsModule">
+      <HintPath>managed\UnityEngine.StyleSheetsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SubstanceModule">
+      <HintPath>managed\UnityEngine.SubstanceModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainModule">
+      <HintPath>managed\UnityEngine.TerrainModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainPhysicsModule">
+      <HintPath>managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreModule">
+      <HintPath>managed\UnityEngine.TextCoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TilemapModule">
+      <HintPath>managed\UnityEngine.TilemapModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Timeline">
+      <HintPath>managed\UnityEngine.Timeline.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TimelineModule">
+      <HintPath>managed\UnityEngine.TimelineModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TLSModule">
+      <HintPath>managed\UnityEngine.TLSModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>managed\UnityEngine.UIElementsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UmbraModule">
+      <HintPath>managed\UnityEngine.UmbraModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UNETModule">
+      <HintPath>managed\UnityEngine.UNETModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityAnalyticsModule">
+      <HintPath>managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityConnectModule">
+      <HintPath>managed\UnityEngine.UnityConnectModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityTestProtocolModule">
+      <HintPath>managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+      <HintPath>managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VehiclesModule">
+      <HintPath>managed\UnityEngine.VehiclesModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VFXModule">
+      <HintPath>managed\UnityEngine.VFXModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>managed\UnityEngine.VideoModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+      <HintPath>managed\UnityEngine.VRModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.WindModule">
+      <HintPath>managed\UnityEngine.WindModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.XRModule">
+      <HintPath>managed\UnityEngine.XRModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\AssemblyInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyInfo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="src\Compat\CompatMessageTypes.cs" />
+    <Compile Include="src\Compat\CustomMaps\CustomMapsPatches.cs" />
+    <Compile Include="src\Compat\CustomMaps\LoadCustomMapMessage.cs" />
+    <Compile Include="src\Compat\Playermodels\LoadCustomPlayerMessage.cs" />
+    <Compile Include="src\Compat\Playermodels\PlayerSkinLoader.cs" />
+    <Compile Include="src\Data\Files\DataTransaction.cs" />
+    <Compile Include="src\Data\Files\BanList.cs" />
+    <Compile Include="src\Data\Files\EmbeddedResource.cs" />
+    <Compile Include="src\Data\Files\EmebeddedAssetBundle.cs" />
+    <Compile Include="src\Data\Files\GameSDK.cs" />
+    <Compile Include="src\Data\Files\PersistentData.cs" />
+    <Compile Include="src\Data\Containers\PhysicsData.cs" />
+    <Compile Include="src\Data\Containers\PlayerScripts.cs" />
+    <Compile Include="src\Data\Containers\SimplifiedHand.cs" />
+    <Compile Include="src\Data\Containers\SimplifiedQuaternion.cs" />
+    <Compile Include="src\Data\Containers\SimplifiedTransform.cs" />
+    <Compile Include="src\Data\Containers\SpawnableData.cs" />
+    <Compile Include="src\Data\Validation\ChecksumTool.cs" />
+    <Compile Include="src\EntangleLogger.cs" />
+    <Compile Include="src\EntangleNotif.cs" />
+    <Compile Include="src\Exceptions\ExpectedClientException.cs" />
+    <Compile Include="src\Exceptions\ExpectedServerException.cs" />
+    <Compile Include="src\Extensions\Array.cs" />
+    <Compile Include="src\Extensions\AssetBundleUtilities.cs" />
+    <Compile Include="src\Extensions\ComponentCache.cs" />
+    <Compile Include="src\Extensions\ConfigurableJoint.cs" />
+    <Compile Include="src\Extensions\Dictionary.cs" />
+    <Compile Include="src\Extensions\IEnumerable.cs" />
+    <Compile Include="src\Extensions\List.cs" />
+    <Compile Include="src\Extensions\SearchUtilities.cs" />
+    <Compile Include="src\Extensions\SyncUtilities.cs" />
+    <Compile Include="src\Extensions\Transform.cs" />
+    <Compile Include="src\Extensions\UnityComparer.cs" />
+    <Compile Include="src\Extensions\Vector3.cs" />
+    <Compile Include="src\Extensions\XElement.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Callbacks\CallResult.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Callbacks\ICallbackData.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Classes\AuthTicket.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Classes\Dispatch.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Classes\SteamApi.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Classes\SteamGameServer.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Classes\SteamInternal.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Enum\LeaderboardDisplay.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Enum\LeaderboardSort.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Enum\SendType.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\CustomEnums.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamAppList.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamApps.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamClient.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamController.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamFriends.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamGameSearch.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamGameServer.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamGameServerStats.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamHTMLSurface.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamHTTP.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamInput.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamInventory.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMatchmaking.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMatchmakingPingResponse.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMatchmakingPlayersResponse.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMatchmakingRulesResponse.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMatchmakingServerListResponse.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMatchmakingServers.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMusic.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamMusicRemote.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamNetworking.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamNetworkingConnectionCustomSignaling.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamNetworkingCustomSignalingRecvContext.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamNetworkingSockets.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamNetworkingUtils.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamParentalSettings.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamParties.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamRemotePlay.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamRemoteStorage.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamScreenshots.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamTV.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamUGC.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamUser.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamUserStats.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamUtils.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\Interfaces\ISteamVideo.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\SteamCallbacks.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\SteamConstants.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\SteamEnums.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\SteamStructFunctions.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\SteamStructs.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Generated\SteamTypes.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\Connection.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\ConnectionInfo.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\ConnectionManager.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\IConnectionManager.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\ISocketManager.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetAddress.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetDebugFunc.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetErrorMessage.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetIdentity.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetKeyValue.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetMsg.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\NetPingLocation.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\Socket.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\SocketManager.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Networking\SteamDatagramRelayAuthTicket.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\Base.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\Favourites.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\Friends.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\History.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\Internet.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\IpList.cs" />
+    <Compile Include="src\Facepunch.Steamworks\ServerList\LocalNetwork.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamApps.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamClient.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamFriends.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamInput.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamInventory.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamMatchmaking.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamMatchmakingServers.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamMusic.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamNetworking.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamNetworkingSockets.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamNetworkingUtils.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamParental.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamParties.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamRemotePlay.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamRemoteStorage.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamScreenshots.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamServer.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamServerStats.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamUgc.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamUser.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamUserStats.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamUtils.cs" />
+    <Compile Include="src\Facepunch.Steamworks\SteamVideo.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Achievement.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\AppId.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Controller.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\DepotId.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\DlcInformation.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\DownloadProgress.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\DurationControl.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\FileDetails.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Friend.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\GameId.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Image.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\InventoryDef.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\InventoryItem.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\InventoryPurchaseResult.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\InventoryRecipe.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\InventoryResult.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Leaderboard.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\LeaderboardEntry.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\LeaderboardUpdate.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Lobby.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\LobbyQuery.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\MatchMakingKeyValuePair.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\NumericalFilter.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\OutgoingPacket.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\P2Packet.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\PartyBeacon.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\RemotePlaySession.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Screenshot.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Server.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\ServerInit.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Stat.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\SteamId.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\SteamIpAddress.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\SteamParamStringArray.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\Ugc.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\UgcEditor.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\UgcItem.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\UgcQuery.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\UgcResultPage.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Structs\UserItemVote.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\Epoch.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\Helpers.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\Platform.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\SourceServerQuery.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\SteamInterface.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\Utf8String.cs" />
+    <Compile Include="src\Facepunch.Steamworks\Utility\Utility.cs" />
+    <Compile Include="src\Managers\PlayerDeathManager.cs" />
+    <Compile Include="src\Managers\RagdollBehaviour.cs" />
+    <Compile Include="src\Modularity\DllTools.cs" />
+    <Compile Include="src\Modularity\Module.cs" />
+    <Compile Include="src\Modularity\ModuleHandler.cs" />
+    <Compile Include="src\Modularity\ModuleInfo.cs" />
+    <Compile Include="src\Modularity\ModuleLogger.cs" />
+    <Compile Include="src\Network\Messages\Arena\Fantasy Arena\FantasyChallengeMessage.cs" />
+    <Compile Include="src\Network\Messages\Arena\Fantasy Arena\FantasyDifficultyMessage.cs" />
+    <Compile Include="src\Network\Messages\Arena\Fantasy Arena\FantasyEnemyCountMessage.cs" />
+    <Compile Include="src\Network\Messages\Arena\Zombie Warehouse\ZombieDifficultyMessage.cs" />
+    <Compile Include="src\Network\Messages\Arena\Zombie Warehouse\ZombieLoadoutMessage.cs" />
+    <Compile Include="src\Network\Messages\Arena\Zombie Warehouse\ZombieModeMessage.cs" />
+    <Compile Include="src\Network\Messages\Arena\Zombie Warehouse\ZombieStartMessage.cs" />
+    <Compile Include="src\Network\Messages\Attacks\BalloonShotMessage.cs" />
+    <Compile Include="src\Network\Messages\Data\TransactionBeginMessage.cs" />
+    <Compile Include="src\Network\Messages\Data\TransactionWorkMessage.cs" />
+    <Compile Include="src\Network\Messages\Destruction\ObjectDestroyMessage.cs" />
+    <Compile Include="src\Network\Messages\EmptyMessageData.cs" />
+    <Compile Include="src\Network\Messages\Objects\GripEventMessage.cs" />
+    <Compile Include="src\Network\Messages\Objects\IDCallbackMessage.cs" />
+    <Compile Include="src\Network\Messages\Objects\MagazinePlugMessage.cs" />
+    <Compile Include="src\Network\Messages\Objects\TransformCollisionMessage.cs" />
+    <Compile Include="src\Network\Messages\Objects\TransformCreateMessage.cs" />
+    <Compile Include="src\Network\Messages\Objects\TransformQueueMessage.cs" />
+    <Compile Include="src\Network\Messages\Objects\TransformSyncMessage.cs" />
+    <Compile Include="src\Network\Messages\Pools\SpawnClientMessage.cs" />
+    <Compile Include="src\Network\Messages\Pools\SpawnRequestMessage.cs" />
+    <Compile Include="src\Network\Messages\Pools\SpawnTransferMessage.cs" />
+    <Compile Include="src\Network\Messages\Representation\PlayerEventMessage.cs" />
+    <Compile Include="src\Network\Messages\Server\DisconnectMessage.cs" />
+    <Compile Include="src\Network\Messages\Representation\GripRadiusMessage.cs" />
+    <Compile Include="src\Network\Messages\Attacks\GunShotMessage.cs" />
+    <Compile Include="src\Network\Messages\Representation\HandPoseChangeMessage.cs" />
+    <Compile Include="src\Network\Messages\Server\HeartbeatMessage.cs" />
+    <Compile Include="src\Network\Messages\Server\LevelChangeMessage.cs" />
+    <Compile Include="src\Network\Messages\Attacks\PowerPunchMessage.cs" />
+    <Compile Include="src\Network\Messages\Attacks\PlayerAttackMessage.cs" />
+    <Compile Include="src\Network\Messages\Representation\PlayerRepSyncMessage.cs" />
+    <Compile Include="src\Network\Messages\Server\ShortIdMessage.cs" />
+    <Compile Include="src\Network\Messages\Server\SpawnObjectMessage.cs" />
+    <Compile Include="src\Data\Containers\DataCorruptionException.cs" />
+    <Compile Include="src\Network\Net.cs" />
+    <Compile Include="src\Network\NetworkMessageTypes.cs" />
+    <Compile Include="src\Network\Nodes\Client.cs" />
+    <Compile Include="src\Network\Nodes\Node.cs" />
+    <Compile Include="src\Objects\ObjectBlacklist.cs" />
+    <Compile Include="src\Objects\ObjectSync.cs" />
+    <Compile Include="src\Objects\PooleeSyncable.cs" />
+    <Compile Include="src\Objects\SpawnManager.cs" />
+    <Compile Include="src\Objects\Syncable.cs" />
+    <Compile Include="src\Objects\TransformSyncables\TransformDestruction.cs" />
+    <Compile Include="src\Objects\TransformSyncables\TransformGripEvents.cs" />
+    <Compile Include="src\Objects\TransformSyncables\TransformSyncable.cs" />
+    <Compile Include="src\Patching\Patcher.cs" />
+    <Compile Include="src\Compat\OptionalAssemblyPatch.cs" />
+    <Compile Include="src\Compat\Playermodels\PlayermodelsPatches.cs" />
+    <Compile Include="src\Patching\Patches\DestructablePatches.cs" />
+    <Compile Include="src\Patching\Patches\FantasyArenaPatches.cs" />
+    <Compile Include="src\Patching\Patches\GadgetPatches.cs" />
+    <Compile Include="src\Patching\Patches\GameControlPatches.cs" />
+    <Compile Include="src\Patching\Patches\GripPatches.cs" />
+    <Compile Include="src\Patching\Patches\GunPatches.cs" />
+    <Compile Include="src\Patching\Patches\MagazinePatches.cs" />
+    <Compile Include="src\Patching\Patches\MeleePatches.cs" />
+    <Compile Include="src\Patching\Patches\PoolPatches.cs" />
+    <Compile Include="src\Patching\Patches\SpawnGunPatches.cs" />
+    <Compile Include="src\Patching\Patches\PlayerPatches.cs" />
+    <Compile Include="src\Mod.cs" />
+    <Compile Include="src\Patching\Patches\WeaponSlotPatches.cs" />
+    <Compile Include="src\Patching\Patches\ZombieArenaPatches.cs" />
+    <Compile Include="src\Patching\Patches\ZonePatches.cs" />
+    <Compile Include="src\Representation\PlayerRep.cs" />
+    <Compile Include="src\Network\DiscordIntegration.cs" />
+    <Compile Include="src\Network\Messages\Server\ConnectionMessage.cs" />
+    <Compile Include="src\Network\NetworkMessage.cs" />
+    <Compile Include="src\Network\NetworkMessageHandler.cs" />
+    <Compile Include="src\Network\Nodes\Server.cs" />
+    <Compile Include="src\UI\BanlistUI.cs" />
+    <Compile Include="src\UI\ClientUI.cs" />
+    <Compile Include="src\UI\DebugUI.cs" />
+    <Compile Include="src\UI\LoadingScreen.cs" />
+    <Compile Include="src\UI\LobbiesUI.cs" />
+    <Compile Include="src\UI\ServerUI.cs" />
+    <Compile Include="src\UI\StatsUI.cs" />
+    <Compile Include="src\UI\UI.cs" />
+    <Compile Include="src\UI\VoiceUI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="dependencies\" />
+    <Folder Include="managed\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\steam_api64.dll" />
+    <Content Include="src\AssemblyInfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyInfo.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\playerrep.eres" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\logo.eres" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
