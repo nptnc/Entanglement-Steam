@@ -104,7 +104,7 @@ namespace Entanglement.Network
             return null;
         }
 
-        public static void ReadMessage(NetworkMessage message, long sender) {
+        public static void ReadMessage(NetworkMessage message, ulong sender) {
             try {
                 handlers[message.messageType].ReadMessage(message, sender);
             }

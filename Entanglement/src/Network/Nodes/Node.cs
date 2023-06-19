@@ -40,6 +40,10 @@ namespace Entanglement.Network {
             DiscordIntegration.UpdateVoice(DiscordIntegration.voiceStatus);
         }
 
+        public void ConnectToServer(ulong SteamId) {
+            
+        }
+
         public void OnDiscordUserJoined(long lobbyId, long userId) {
             CreatePlayerRep(userId);
 
@@ -52,7 +56,6 @@ namespace Entanglement.Network {
                 msgData.requestCallback = true;
                 SendMessage(userId, NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.PlayerModel, msgData).GetBytes());
             }
-
             UserConnectedEvent(lobbyId, userId);
         }
 
