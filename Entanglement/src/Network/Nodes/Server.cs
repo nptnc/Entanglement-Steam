@@ -13,6 +13,7 @@ using Entanglement.Data;
 using StressLevelZero;
 
 using UnityEngine;
+using Entanglement.src.Network.Steam;
 
 namespace Entanglement.Network
 {
@@ -21,6 +22,8 @@ namespace Entanglement.Network
         public static byte maxPlayers = 8;
         public static bool isLocked = false;
         public static LobbyType lobbyType = LobbyType.Private;
+
+        public static ServerSocket serverSocket;
 
         // Hard locked settings
         public const byte serverMinimum = 1;

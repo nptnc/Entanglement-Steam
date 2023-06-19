@@ -20,7 +20,7 @@ namespace Entanglement.Network {
     public class Client : Node {
         // Static preferences
         public static bool nameTagsVisible = true;
-        ClientSocket clientSocket;
+        public static ClientSocket clientSocket;
 
         // There can only be one client, otherwise things will break
         public static Client instance = null;

@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 using System.IO;
 
 using MelonLoader;
-
-using Discord;
-
 using Entanglement.Representation;
 using Entanglement.Compat.Playermodels;
 using Entanglement.Objects;
@@ -17,9 +14,6 @@ using Entanglement.Data;
 
 namespace Entanglement.Network {
     public abstract class Node {
-        public List<long> connectedUsers = new List<long>();
-        public Dictionary<long, User> userDatas = new Dictionary<long, User>();
-
         // Reset per frame, but used in Entanglement -> Stats to see the network load
         public uint sentByteCount, recievedByteCount;
 
@@ -59,16 +53,15 @@ namespace Entanglement.Network {
             UserConnectedEvent(lobbyId, userId);
         }
 
-        public void OnDiscordUserLeft(long lobbyId, long userId) {
-            EntangleNotif.PlayerLeave($"{PlayerRepresentation.representations[userId].playerName}");
+        public void OnDiscordUserLeft(PlayerId playerId) {
+            EntangleNotif.PlayerLeave($"{PlayerRepresentation.representations[playerId.LargeId].playerName}");
 
-            PlayerRepresentation.representations[userId].DeleteRepresentations();
-            PlayerRepresentation.representations.Remove(userId);
-            userDatas.Remove(userId);
-            connectedUsers.Remove(userId);
-            DiscordIntegration.RemoveUser(userId);
+            PlayerRepresentation.representations[playerId.LargeId].DeleteRepresentations();
+            PlayerRepresentation.representations.Remove(playerId.LargeId);
+            // TODO: REMOVE CONNECTED USERS!
+            DiscordIntegration.RemoveUser(playerId.LargeId);
 
-            UserDisconnectEvent(lobbyId, userId);
+            UserDisconnectEvent(lobbyId, playerId.LargeId);
         }
 
         public void CreatePlayerRep(long userId)
