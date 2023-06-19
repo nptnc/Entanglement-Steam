@@ -9,6 +9,7 @@ using Entanglement.Representation;
 using Entanglement.Extensions;
 
 using HarmonyLib;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
@@ -26,7 +27,7 @@ namespace Entanglement.Patching
             string[] playerName = objName.Split('.');
             if (playerName.Length < 2)
                 throw new IndexOutOfRangeException();
-            long id = long.Parse(playerName[1]);
+            ulong id = ulong.Parse(playerName[1]);
 
             ContactPoint contact = collision.GetContact(0);
             // TODO: Remove this hardcode, just tired of trying to make this goddamn thing work
@@ -48,7 +49,7 @@ namespace Entanglement.Patching
 
             byte[] msgBytes = message.GetBytes();
 
-            Node.activeNode.SendMessage(id, NetworkChannel.Attack, msgBytes);
+            Node.activeNode.SendMessage(id, SendType.Reliable, msgBytes);
         }
     }
 }

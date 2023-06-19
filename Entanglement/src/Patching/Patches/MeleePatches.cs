@@ -9,6 +9,7 @@ using Entanglement.Network;
 using Entanglement.Objects;
 
 using HarmonyLib;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
@@ -31,7 +32,7 @@ namespace Entanglement.Patching
                 string[] playerName = objName.Split('.');
                 if (playerName.Length < 2)
                     throw new IndexOutOfRangeException();
-                long id = long.Parse(playerName[1]);
+                ulong id = ulong.Parse(playerName[1]);
 
                 NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.PlayerAttack, new PlayerAttackMessageData()
                 {
@@ -41,7 +42,7 @@ namespace Entanglement.Patching
 
                 byte[] msgBytes = message.GetBytes();
 
-                Node.activeNode.SendMessage(id, NetworkChannel.Attack, msgBytes);
+                Node.activeNode.SendMessage(id, SendType.Reliable, msgBytes);
             }
             catch { }
         }

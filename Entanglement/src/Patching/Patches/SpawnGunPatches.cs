@@ -13,6 +13,7 @@ using Entanglement.Objects;
 using System.Collections;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
@@ -20,7 +21,7 @@ namespace Entanglement.Patching
     public class SpawnFirePatch
     {
         public static void Postfix(SpawnGun __instance) {
-            if (!DiscordIntegration.hasLobby)
+            if (!NetworkInfo.hasLobby)
                 return;
 
             MelonCoroutines.Start(SpawnGunFire(__instance));
@@ -58,7 +59,7 @@ namespace Entanglement.Patching
                 };
 
                 NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.SpawnRequest, data);
-                Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
 
                 // We need to make sure this object is disabled
                 lastSpawn.gameObject.SetActive(false);

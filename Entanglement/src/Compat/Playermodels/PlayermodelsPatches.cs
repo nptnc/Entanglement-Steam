@@ -16,6 +16,7 @@ using Entanglement.Extensions;
 using UnityEngine;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Compat.Playermodels
 {
@@ -85,10 +86,10 @@ namespace Entanglement.Compat.Playermodels
 
         public static void BroadcastPlayermodel(string path) {
             LoadCustomPlayerMessageData msgData = new LoadCustomPlayerMessageData();
-            msgData.userId = DiscordIntegration.localId.Id;
+            msgData.userId = DiscordIntegration.localId.SmallId;
             msgData.modelPath = Path.GetFileName(path);
 
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.PlayerModel, msgData).GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, NetworkMessage.CreateMessage(CompatMessageType.PlayerModel, msgData).GetBytes());
         }
     }
 }

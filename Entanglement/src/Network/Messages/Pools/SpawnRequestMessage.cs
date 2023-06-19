@@ -15,6 +15,7 @@ using StressLevelZero.Data;
 using UnityEngine;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Network
 {
@@ -138,7 +139,7 @@ namespace Entanglement.Network
             };
 
             NetworkMessage clientMessage = NetworkMessage.CreateMessage(BuiltInMessageType.SpawnClient, data);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Object, clientMessage.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, clientMessage.GetBytes());
         }
     }
 

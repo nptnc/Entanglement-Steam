@@ -14,6 +14,7 @@ using Entanglement.Data;
 using Entanglement.Network;
 
 using HarmonyLib;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
@@ -28,13 +29,13 @@ namespace Entanglement.Patching
 
             GunShotMessageData shotData = new GunShotMessageData()
             {
-                userId = DiscordIntegration.localId.Id,
+                userId = DiscordIntegration.localId.SmallId,
                 bulletObject = bulletObject,
                 bulletTransform = new SimplifiedTransform(firePoint)
             };
 
             NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.GunShot, shotData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Attack, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
         }
     }
 
@@ -48,13 +49,13 @@ namespace Entanglement.Patching
 
             BalloonShotMessageData balloonData = new BalloonShotMessageData()
             {
-                userId = DiscordIntegration.localId.Id,
+                userId = DiscordIntegration.localId.SmallId,
                 balloonColor = __instance.currentColor,
                 balloonTransform = new SimplifiedTransform(firePoint),
             };
 
             NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.BalloonShot, balloonData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Attack, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
         }
     }
 }

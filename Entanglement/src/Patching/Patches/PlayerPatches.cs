@@ -19,6 +19,7 @@ using Entanglement.Objects;
 using Entanglement.Extensions;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
@@ -68,7 +69,7 @@ namespace Entanglement.Patching
             string[] playerName = objName.Split('.');
             if (playerName.Length < 2)
                 throw new IndexOutOfRangeException();
-            long id = long.Parse(playerName[1]);
+            ulong id = ulong.Parse(playerName[1]);
             NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.PlayerAttack, new PlayerAttackMessageData() { 
                 attackType = AttackType.Blunt,
                 attackDamage = (ushort)(impulse / 5f),
@@ -76,7 +77,7 @@ namespace Entanglement.Patching
 
             byte[] msgBytes = message.GetBytes();
 
-            Node.activeNode.SendMessage(id, NetworkChannel.Attack, msgBytes);
+            Node.activeNode.SendMessage(id, SendType.Reliable, msgBytes);
         }
     }
 
@@ -111,7 +112,7 @@ namespace Entanglement.Patching
 
             HandPoseChangeMessageData poseData = new HandPoseChangeMessageData();
 
-            poseData.userId = DiscordIntegration.localId.Id;
+            poseData.userId = DiscordIntegration.localId.SmallId;
             poseData.hand = hand;
             poseData.poseIndex = (ushort)poseIndex;
 
@@ -119,7 +120,7 @@ namespace Entanglement.Patching
 
             byte[] msgBytes = message.GetBytes();
 
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+            Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
 
 #if DEBUG
             if (PlayerRepresentation.debugRepresentation != null) PlayerRepresentation.debugRepresentation.UpdatePose(poseData.hand, poseData.poseIndex);
@@ -154,15 +155,14 @@ namespace Entanglement.Patching
 
             GripRadiusMessageData radiusData = new GripRadiusMessageData();
 
-            radiusData.userId = DiscordIntegration.localId.Id;
+            radiusData.userId = DiscordIntegration.localId.SmallId;
             radiusData.hand = hand;
             radiusData.radius = radius;
 
             NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.GripRadius, radiusData);
 
             byte[] msgBytes = message.GetBytes();
-
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+            Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
 
 #if DEBUG
             if (PlayerRepresentation.debugRepresentation != null) PlayerRepresentation.debugRepresentation.UpdatePoseRadius(radiusData.hand, radiusData.radius);

@@ -155,10 +155,18 @@ namespace Entanglement {
             Client.instance?.Tick();
             Server.instance?.Tick();
 
-            // This will update and flush discords callbacks
-            DiscordIntegration.Tick();
+            // This will update and flush discords callbacks, not needed for steam
+            //DiscordIntegration.Tick();
         }
 
+        public override void OnGUI() {
+            // TODO: temporary ui until we create lobby system
+            
+            /*if (GUI.Button(new Rect(10, 10, 150, 100), "Connect")) {
+                EntangleLogger.Log("You clicked the button!");
+            }*/
+        }
+        
         public override void OnSceneWasInitialized(int buildIndex, string sceneName) {
             if (DiscordIntegration.isInvalid) return;
 
@@ -175,10 +183,6 @@ namespace Entanglement {
 
             Client.instance.currentScene = (byte)buildIndex;
             sceneChange = (byte)buildIndex;
-
-            DiscordIntegration.targetScene = sceneName.ToLower();
-            DiscordIntegration.activity.Assets = DiscordIntegration.CreateAssets(DiscordIntegration.hasLobby);
-            DiscordIntegration.UpdateActivity();
         }
 
         public override void BONEWORKS_OnLoadingScreen() {

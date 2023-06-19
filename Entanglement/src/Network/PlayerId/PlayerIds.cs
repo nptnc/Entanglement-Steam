@@ -34,6 +34,8 @@ namespace Entanglement.Network
             playerIds.Remove(playerId);
         }
 
+        public static PlayerId GetOwner() => playerIds.FirstOrDefault(id => id.SmallId == 0);
+
         public static PlayerId Add(ulong largeId, byte smallId, string userName) {
             if (GetPlayerFromLargeId(largeId) != null)
                 return null;

@@ -20,6 +20,7 @@ using UnityEngine;
 using PuppetMasta;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Patching {
 
@@ -116,7 +117,7 @@ namespace Entanglement.Patching {
         }
 
         public static void OnSpawn(GameObject spawnedObject, Pool pool) {
-            if (!DiscordIntegration.hasLobby || SpawnManager.SpawnOverride)
+            if (!NetworkInfo.hasLobby || SpawnManager.SpawnOverride)
                 return;
 
             // We don't want to dupe items
@@ -125,7 +126,7 @@ namespace Entanglement.Patching {
                 // Now we transfer the spawn to the host
                 if (Node.isServer) {
                     // Set us as owner
-                    pooleeSyncable.SetOwner(DiscordIntegration.localId.Id);
+                    pooleeSyncable.SetOwner(DiscordIntegration.localId.SmallId);
 
                     SpawnTransferMessageData data = new SpawnTransferMessageData()
                     {
@@ -134,7 +135,7 @@ namespace Entanglement.Patching {
                     };
 
                     NetworkMessage transferMessage = NetworkMessage.CreateMessage(BuiltInMessageType.SpawnTransfer, data);
-                    Node.activeNode.BroadcastMessage(NetworkChannel.Object, transferMessage.GetBytes());
+                    Node.activeNode.BroadcastMessage(SendType.Reliable, transferMessage.GetBytes());
                 }
                 return;
             }
@@ -191,10 +192,10 @@ namespace Entanglement.Patching {
                 if (existingSync) {
                     ObjectSync.MoveSyncable(existingSync, thisId);
                     existingSync.ClearOwner();
-                    existingSync.TrySetStale(DiscordIntegration.lobby.OwnerId);
+                    existingSync.TrySetStale(PlayerIds.GetOwner().LargeId);
                 }
                 else {
-                    TransformSyncable.CreateSync(DiscordIntegration.lobby.OwnerId, ComponentCacheExtensions.m_RigidbodyCache.GetOrAdd(go), thisId);
+                    TransformSyncable.CreateSync(PlayerIds.GetOwner().LargeId, ComponentCacheExtensions.m_RigidbodyCache.GetOrAdd(go), thisId);
                 }
 
                 ObjectSync.lastId = thisId;
@@ -210,7 +211,7 @@ namespace Entanglement.Patching {
             };
 
             NetworkMessage clientMessage = NetworkMessage.CreateMessage(BuiltInMessageType.SpawnClient, data);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Object, clientMessage.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, clientMessage.GetBytes());
 
             var pooleeSyncable = spawnedObject.AddComponent<PooleeSyncable>();
             pooleeSyncable.id = id;

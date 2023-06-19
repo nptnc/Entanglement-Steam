@@ -9,6 +9,7 @@ using Entanglement.Representation;
 using Entanglement.Extensions;
 
 using HarmonyLib;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
@@ -56,7 +57,7 @@ namespace Entanglement.Patching
 
                 byte[] msgBytes = message.GetBytes();
 
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+                Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
             }
             ZombieMode_Settings.m_invalidSettings = false;
         }
@@ -76,7 +77,7 @@ namespace Entanglement.Patching
 
                 byte[] msgBytes = message.GetBytes();
 
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+                Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
             }
             ZombieMode_Settings.m_invalidSettings = false;
         }
@@ -95,7 +96,7 @@ namespace Entanglement.Patching
 
             byte[] msgBytes = message.GetBytes();
 
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+            Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
         }
     }
 
@@ -110,7 +111,7 @@ namespace Entanglement.Patching
                 NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.ZombieStart, new EmptyMessageData());
                 byte[] msgBytes = message.GetBytes();
 
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+                Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
             }
 
         }

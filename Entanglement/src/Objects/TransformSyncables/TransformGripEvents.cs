@@ -19,6 +19,7 @@ using StressLevelZero.Props;
 using Utilties;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Objects
 {
@@ -143,7 +144,7 @@ namespace Entanglement.Objects
             };
 
             NetworkMessage gripEventMessage = NetworkMessage.CreateMessage(BuiltInMessageType.GripEvent, data);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, gripEventMessage.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, gripEventMessage.GetBytes());
         }
     }
 }

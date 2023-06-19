@@ -7,6 +7,7 @@ using Entanglement.Network;
 using Entanglement.Data;
 
 using HarmonyLib;
+using Steamworks.Data;
 
 namespace Entanglement.Compat.CustomMaps {
     [OptionalAssemblyTarget("CustomMaps")]
@@ -71,7 +72,7 @@ namespace Entanglement.Compat.CustomMaps {
                     mapPath = Path.GetFileName(mapToLoad),
                 };
 
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.CustomMap, mapData).GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, NetworkMessage.CreateMessage(CompatMessageType.CustomMap, mapData).GetBytes());
             }
         }
 
@@ -92,7 +93,7 @@ namespace Entanglement.Compat.CustomMaps {
                     mapPath = Path.GetFileName(path),
                 };
 
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.CustomMap, mapData).GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, NetworkMessage.CreateMessage(CompatMessageType.CustomMap, mapData).GetBytes());
             }
         }
 
@@ -105,7 +106,7 @@ namespace Entanglement.Compat.CustomMaps {
                     mapPath = Path.GetFileName(archivePath),
                 };
 
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, NetworkMessage.CreateMessage(CompatMessageType.CustomMap, mapData).GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, NetworkMessage.CreateMessage(CompatMessageType.CustomMap, mapData).GetBytes());
             }
         }
 
