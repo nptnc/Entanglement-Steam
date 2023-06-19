@@ -12,12 +12,20 @@ namespace Entanglement.Network
 {
     public static class PlayerIds
     {
-        public static List<PlayerId> playerIds = new List<PlayerId>();
+        private static List<PlayerId> playerIds = new List<PlayerId>();
 
-        public static void Dispose(PlayerId playerId)
-        {
-            PlayerRepresentation rep = PlayerRepresentation.representations[playerId.LargeId];
-            rep.DeleteRepresentations();
+        public static void Dispose(PlayerId playerId) {
+            // PlayerRepresentation rep = PlayerRepresentation.representations[playerId.LargeId];
+            //rep.DeleteRepresentations();
+
+            playerIds.Remove(playerId);
+        }
+
+        public static void Add(ulong largeId, byte smallId, string userName) {
+            if (GetPlayerFromLargeId(largeId) == null)
+                return;
+            
+            playerIds.Add(new PlayerId(largeId,smallId,userName));
         }
 
         public static PlayerId GetPlayerFromSmallId(byte SmallId) => playerIds.Where(id => id.SmallId == SmallId).FirstOrDefault();
