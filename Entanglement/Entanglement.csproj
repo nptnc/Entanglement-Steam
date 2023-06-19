@@ -568,6 +568,10 @@
     <Compile Include="src\Network\NetworkMessageTypes.cs" />
     <Compile Include="src\Network\Nodes\Client.cs" />
     <Compile Include="src\Network\Nodes\Node.cs" />
+    <Compile Include="src\Network\PlayerId\PlayerId.cs" />
+    <Compile Include="src\Network\PlayerId\PlayerIds.cs" />
+    <Compile Include="src\Network\Steam\Sockets.cs" />
+    <Compile Include="src\Network\Steam\SteamSocketHandler.cs" />
     <Compile Include="src\Objects\ObjectBlacklist.cs" />
     <Compile Include="src\Objects\ObjectSync.cs" />
     <Compile Include="src\Objects\PooleeSyncable.cs" />

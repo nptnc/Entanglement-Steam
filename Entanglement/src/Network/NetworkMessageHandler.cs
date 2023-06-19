@@ -30,7 +30,7 @@ namespace Entanglement.Network
 
         // This is like super messy but i'll clean it up later
         // I'm not good at modular stuff - Lakatrazz
-        public void ReadMessage(NetworkMessage message, long sender) {
+        public void ReadMessage(NetworkMessage message, ulong sender) {
             if (SceneLoader.loading) {
                 if (Attributes.Contains(typeof(Net.SkipHandleOnLoading)))
                     return;
@@ -41,14 +41,14 @@ namespace Entanglement.Network
                 HandleMessage(message, sender);
         }
 
-        public IEnumerator HandleOnLoaded(NetworkMessage message, long sender) {
+        public IEnumerator HandleOnLoaded(NetworkMessage message, ulong sender) {
             while (SceneLoader.loading)
                 yield return null;
 
             HandleMessage(message, sender);
         }
 
-        public abstract void HandleMessage(NetworkMessage message, long sender);
+        public abstract void HandleMessage(NetworkMessage message, ulong sender);
 
         public abstract NetworkMessage CreateMessage(NetworkMessageData data);
     }

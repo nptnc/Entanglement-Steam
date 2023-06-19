@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Entanglement.Representation;
-using Entanglement.src.Network.PlayerId;
+using Entanglement.Network;
 
 namespace Entanglement.Network
 {

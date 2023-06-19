@@ -12,6 +12,8 @@ namespace Entanglement.src.Network.Steam
 {
     public class ServerSocket : SocketManager
     {
+        public Dictionary<ulong, Connection> steamIdConnections = new Dictionary<ulong, Connection>();
+        
         public override void OnConnecting(Connection connection, ConnectionInfo info)
         {
             base.OnConnecting(connection, info);
@@ -29,6 +31,10 @@ namespace Entanglement.src.Network.Steam
 
         public override void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
+            if (!steamIdConnections.ContainsKey(identity.steamid)) {
+                steamIdConnections.Add(identity.steamid,connection);
+            }
+            
             base.OnMessage(connection, identity, data, size, messageNum, recvTime, channel);
         }
     }

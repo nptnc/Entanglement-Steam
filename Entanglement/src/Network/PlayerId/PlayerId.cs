@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entanglement.src.Network.PlayerId
+namespace Entanglement.Network
 {
     public class PlayerId
     {
