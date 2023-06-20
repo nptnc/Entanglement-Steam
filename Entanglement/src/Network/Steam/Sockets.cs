@@ -14,12 +14,14 @@ namespace Entanglement.src.Network.Steam
     {
         public override void OnConnecting(Connection connection, ConnectionInfo info)
         {
-            
+            EntangleLogger.Log("Connecting to socket servers...");
         }
 
         public override void OnConnected(Connection connection, ConnectionInfo info)
         {
-            
+            EntangleLogger.Log("Socket is up!");
+            SteamIntegration.isHost = true;
+            SteamIntegration.hasServer = true;
         }
 
         public override void OnDisconnected(Connection connection, ConnectionInfo info)
@@ -60,6 +62,8 @@ namespace Entanglement.src.Network.Steam
 
         public override void OnConnected(ConnectionInfo data)
         {
+            SteamIntegration.hasServer = true;
+
             ConnectionMessageData connectionData = new ConnectionMessageData();
             connectionData.packedVersion = BitConverter.ToUInt16(new byte[] { EntanglementVersion.versionMajor, EntanglementVersion.versionMinor }, 0);
             connectionData.username = SteamClient.Name;
@@ -67,6 +71,8 @@ namespace Entanglement.src.Network.Steam
 
             NetworkMessage conMsg = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Connection, connectionData);
             NetworkSender.SendMessageToServer(SendType.Reliable, conMsg.GetBytes());
+
+            EntangleLogger.Log("Connected as client to server socket! Connection info sent");
         }
 
         public override void OnDisconnected(ConnectionInfo data)

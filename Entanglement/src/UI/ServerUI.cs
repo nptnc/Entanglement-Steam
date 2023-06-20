@@ -11,8 +11,6 @@ using ModThatIsNotMod.BoneMenu;
 
 using UnityEngine;
 
-using Discord;
-
 using MelonLoader;
 
 namespace Entanglement.UI {
@@ -41,24 +39,24 @@ namespace Entanglement.UI {
 
             serverPrefsCategory.CreateIntElement("Max Players", Color.white, 8, (value) => {
                 Server.maxPlayers = (byte)value;
-                Server.instance?.UpdateLobbyConfig();
+                //Server.instance?.UpdateLobbyConfig();
             },
             1, Server.serverMinimum, Server.serverCapacity, true);
 
             serverPrefsCategory.CreateBoolElement("Locked", Color.white, false, (value) =>
             {
                 Server.isLocked = value;
-                Server.instance?.UpdateLobbyConfig();
+                //Server.instance?.UpdateLobbyConfig();
             });
 
-            serverPrefsCategory.CreateEnumElement("Visibility", Color.white, LobbyType.Private, (value) =>
+            /*serverPrefsCategory.CreateEnumElement("Visibility", Color.white, LobbyType.Private, (value) =>
             {
                 if (!(value is LobbyType)) return;
 
                 LobbyType type = (LobbyType)value;
                 Server.lobbyType = type;
                 Server.instance?.UpdateLobbyConfig();
-            });
+            });*/
 
             playersCategory = serverCategory.CreateSubCategory("Players", Color.white);
 
@@ -77,15 +75,14 @@ namespace Entanglement.UI {
         public static void Refresh() {
             ClearPlayers();
 
-            if (!DiscordIntegration.hasLobby) {
+            if (!SteamIntegration.hasServer) {
                 UpdateMenu();
                 return;
             }
 
-            IEnumerable<User> users = DiscordIntegration.lobbyManager.GetMemberUsers(DiscordIntegration.lobby.Id);
-
-            foreach (User user in users) {
-                if (user.Id == DiscordIntegration.localId.Id)
+           
+            foreach (PlayerId user in PlayerIds.playerIds) {
+                if (user.LargeId == SteamIntegration.localId.LargeId)
                     continue;
 
                 AddUser(user);
@@ -96,42 +93,42 @@ namespace Entanglement.UI {
 
         public static void UpdateMenu() => MenuManager.OpenCategory(playersCategory);
 
-        public static void AddUser(User player) {
-            string playerName = $"{player.Username}#{player.Discriminator}";
+        public static void AddUser(PlayerId player) {
+            string playerName = $"{player.Username}";
             Color playerColor = Color.white;
-            if (player.Id == DiscordIntegration.lobby.OwnerId) { 
+            if (player.SmallId == 0) { 
                 playerName += " (Host)";
                 playerColor = Color.yellow;
             }
 
             MenuCategory userItem = playersCategory.CreateSubCategory(playerName, playerColor);
-            if (DiscordIntegration.isHost) {
+            if (SteamIntegration.isHost) {
                 userItem.CreateFunctionElement("Kick", Color.red, () => {
-                    if (!DiscordIntegration.isHost) return;
+                    if (!SteamIntegration.isHost) return;
 
-                    Server.instance?.KickUser(player.Id, playerName);
+                    Server.instance?.KickUser(player.LargeId, playerName);
 
                     Refresh();
                 });
 
                 userItem.CreateFunctionElement("Ban", Color.red, () => {
-                    if (!DiscordIntegration.isHost) return;
+                    if (!SteamIntegration.isHost) return;
 
                     BanList.BanUser(player);
-                    Server.instance.KickUser(player.Id, playerName, DisconnectReason.Banned);
+                    Server.instance.KickUser(player.LargeId, playerName, DisconnectReason.Banned);
 
                     Refresh();
                 });
 
-                userItem.CreateFunctionElement("Teleport To", Color.yellow, () => { Server.instance?.TeleportTo(player.Id); });
+                userItem.CreateFunctionElement("Teleport To", Color.yellow, () => { Server.instance?.TeleportTo(player.LargeId); });
             }
-            userItem.CreateIntElement("Volume", Color.white, DiscordIntegration.voiceManager.GetLocalVolume(player.Id) / 20, (value) => {
+            /*userItem.CreateIntElement("Volume", Color.white, DiscordIntegration.voiceManager.GetLocalVolume(player.Id) / 20, (value) => {
                 DiscordIntegration.voiceManager.SetLocalVolume(player.Id, (byte)(value * 20));
             }, 1, 0, 10, true);
 
             userItem.CreateBoolElement("Muted", Color.white, DiscordIntegration.voiceManager.IsLocalMute(player.Id), (value) => {
                 DiscordIntegration.voiceManager.SetLocalMute(player.Id, value);
-            });
+            });*/
         }
     }
 }

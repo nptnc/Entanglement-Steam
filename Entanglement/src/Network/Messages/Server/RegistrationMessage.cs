@@ -28,6 +28,8 @@ namespace Entanglement.Network
             byteBuffer.WriteULong(data.userId);
             byteBuffer.WriteString(data.username);
 
+            message.messageData = byteBuffer.GetBytes();
+
             return message;
         }
 
@@ -53,7 +55,7 @@ namespace Entanglement.Network
             if (playerId != null) {
                 if (longId == SteamClient.SteamId)
                 {
-                    DiscordIntegration.localId = playerId;
+                    SteamIntegration.localId = playerId;
                 }
                 else
                 {

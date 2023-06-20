@@ -13,7 +13,7 @@ namespace Entanglement.UI {
             ServerUI.CreateUI(category);
             ClientUI.CreateUI(category);
             BanlistUI.CreateUI(category);
-            LobbiesUI.CreateUI(category);
+            //LobbiesUI.CreateUI(category);
             VoiceUI.CreateUI(category);
             StatsUI.CreateUI(category);
 

@@ -27,7 +27,7 @@ namespace Entanglement.Network {
         public static bool isServer => activeNode is Server;
 
 
-        public void ConnectToServer(ulong steamId) {
+        public static void ConnectToServer(ulong steamId) {
             NetworkSender.clientSocket = SteamNetworkingSockets.ConnectRelay<ClientSocket>(steamId);
         }
 
@@ -69,11 +69,11 @@ namespace Entanglement.Network {
             CleanupEvent();
         }
 
-        public void SendMessage(ulong userId, SendType channel, byte[] data) {
-            if (DiscordIntegration.hasServer) {
-                NetworkSender.SendMessageToClient(userId, channel,  data);
-                sentByteCount += (uint)data.Length;
-            }
+        public void SendMessage(ulong userId, SendType channel, byte[] data)
+        {
+            // Redirects to specific client if we are not the host via another packet, sorry lak, this aint Discord P2P No more....
+            NetworkSender.SendMessageToClient(userId, channel, data);
+            sentByteCount += (uint) data.Length;
         }
 
         // Sends to owner if client
@@ -82,13 +82,7 @@ namespace Entanglement.Network {
 
         // Forces send in every direction (for P2P-like messages, lowers latency but not good for certain things!)
         public void BroadcastMessageP2P(SendType channel, byte[] data) { 
-            NetworkSender.BroadcastMessage(data, channel);
-        }
-
-        public virtual void Tick() {
-            NetworkSender.clientSocket?.Receive(255);
-            NetworkSender.serverSocket?.Receive(255);
-            SteamClient.RunCallbacks();
+            NetworkSender.BroadcastMessageDirectRelay(data, channel);
         }
 
         public virtual void CleanupEvent() { }

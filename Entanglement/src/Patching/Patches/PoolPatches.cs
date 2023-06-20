@@ -126,7 +126,7 @@ namespace Entanglement.Patching {
                 // Now we transfer the spawn to the host
                 if (Node.isServer) {
                     // Set us as owner
-                    pooleeSyncable.SetOwner(DiscordIntegration.localId.SmallId);
+                    pooleeSyncable.SetOwner(SteamIntegration.localId.SmallId);
 
                     SpawnTransferMessageData data = new SpawnTransferMessageData()
                     {

@@ -112,7 +112,7 @@ namespace Entanglement.Patching
 
             HandPoseChangeMessageData poseData = new HandPoseChangeMessageData();
 
-            poseData.userId = DiscordIntegration.localId.SmallId;
+            poseData.userId = SteamIntegration.localId.SmallId;
             poseData.hand = hand;
             poseData.poseIndex = (ushort)poseIndex;
 
@@ -155,7 +155,7 @@ namespace Entanglement.Patching
 
             GripRadiusMessageData radiusData = new GripRadiusMessageData();
 
-            radiusData.userId = DiscordIntegration.localId.SmallId;
+            radiusData.userId = SteamIntegration.localId.SmallId;
             radiusData.hand = hand;
             radiusData.radius = radius;
 

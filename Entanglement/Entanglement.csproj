@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -355,7 +356,7 @@
     <Compile Include="src\Data\Files\BanList.cs" />
     <Compile Include="src\Data\Files\EmbeddedResource.cs" />
     <Compile Include="src\Data\Files\EmebeddedAssetBundle.cs" />
-    <Compile Include="src\Data\Files\GameSDK.cs" />
+    <Compile Include="src\Data\Files\SteamAPILoader.cs" />
     <Compile Include="src\Data\Files\PersistentData.cs" />
     <Compile Include="src\Data\Containers\PhysicsData.cs" />
     <Compile Include="src\Data\Containers\PlayerScripts.cs" />
@@ -556,6 +557,7 @@
     <Compile Include="src\Network\Messages\Pools\SpawnClientMessage.cs" />
     <Compile Include="src\Network\Messages\Pools\SpawnRequestMessage.cs" />
     <Compile Include="src\Network\Messages\Pools\SpawnTransferMessage.cs" />
+    <Compile Include="src\Network\Messages\Redirect\MessageRedirectMessage.cs" />
     <Compile Include="src\Network\Messages\Representation\PlayerEventMessage.cs" />
     <Compile Include="src\Network\Messages\Server\DisconnectMessage.cs" />
     <Compile Include="src\Network\Messages\Representation\GripRadiusMessage.cs" />
@@ -626,7 +628,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\steam_api64.dll" />
+    <EmbeddedResource Include="resources\steam_api64.dll" />
     <Content Include="src\AssemblyInfo.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo.cs</LastGenOutput>

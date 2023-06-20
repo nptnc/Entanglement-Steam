@@ -57,14 +57,18 @@ namespace Entanglement.Network {
         public void DisconnectFromServer(bool notif = true) {
             if (notif)
                 EntangleNotif.LeftServer();
+            SteamIntegration.hasServer = false;
+            SteamIntegration.isHost = false;
             NetworkSender.clientSocket.Close();
             NetworkSender.clientSocket = null;
 
             CleanData();
         }
 
+
         public override void BroadcastMessage(SendType channel, byte[] data) { 
-            BroadcastMessage(channel, data);
+            // This sends to just the server if we are the client
+            NetworkSender.BroadcastMessage(data, channel);
         }
 
         // Client.Shutdown is ran on closing the game

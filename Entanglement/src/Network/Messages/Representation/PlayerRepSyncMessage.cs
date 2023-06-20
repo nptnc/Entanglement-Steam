@@ -24,7 +24,7 @@ namespace Entanglement.Network
 
             List<byte> rawBytes = new List<byte>();
 
-            rawBytes.Add(DiscordIntegration.GetByteId(data.userId));
+            rawBytes.Add(SteamIntegration.GetByteId(data.userId));
             rawBytes.Add(Convert.ToByte(data.isGrounded));
 
             rawBytes.AddRange(data.rootPosition.GetBytes());
@@ -45,7 +45,7 @@ namespace Entanglement.Network
                 throw new IndexOutOfRangeException();
 
             int index = 0;
-            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = SteamIntegration.GetLongId(message.messageData[index++]);
 
             if (isServerHandled)
             {

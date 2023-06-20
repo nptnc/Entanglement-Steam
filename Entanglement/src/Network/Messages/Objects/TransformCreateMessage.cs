@@ -31,7 +31,7 @@ namespace Entanglement.Network
             message.messageData = new byte[sizeof(ushort) * 2 + sizeof(short) + sizeof(float) + sizeof(byte) * 2 + utf8.Length];
 
             int index = 0;
-            message.messageData[index++] = DiscordIntegration.GetByteId(data.ownerId);
+            message.messageData[index++] = SteamIntegration.GetByteId(data.ownerId);
 
             message.messageData = message.messageData.AddBytes(BitConverter.GetBytes(data.objectId), ref index);
 
@@ -61,7 +61,7 @@ namespace Entanglement.Network
             }
 
             int index = 0;
-            ulong ownerId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong ownerId = SteamIntegration.GetLongId(message.messageData[index++]);
 
             ushort objectId = 0;
             ushort callbackIndex = 0;

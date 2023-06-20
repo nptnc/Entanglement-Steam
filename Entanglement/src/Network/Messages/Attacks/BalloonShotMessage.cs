@@ -29,7 +29,7 @@ namespace Entanglement.Network
 
             int index = 0;
             // User
-            message.messageData[index++] = DiscordIntegration.GetByteId(data.userId);
+            message.messageData[index++] = SteamIntegration.GetByteId(data.userId);
             // Color
             message.messageData[index++] = (byte)data.balloonColor;
             // Transform
@@ -47,7 +47,7 @@ namespace Entanglement.Network
 
             int index = 0;
             // User
-            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = SteamIntegration.GetLongId(message.messageData[index++]);
 
             if (isServerHandled)
             {

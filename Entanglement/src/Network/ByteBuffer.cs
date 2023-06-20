@@ -173,6 +173,10 @@ namespace Entanglement.src.Network
             return bytes;
         }
 
+        public byte[] GetRemainingBytes() {
+            return GetByteRange(Buffer.Length - _readPos);
+        }
+
         public byte[] GetBytes()
         {
             if (_sizeLess)

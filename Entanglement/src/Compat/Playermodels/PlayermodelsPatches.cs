@@ -86,7 +86,7 @@ namespace Entanglement.Compat.Playermodels
 
         public static void BroadcastPlayermodel(string path) {
             LoadCustomPlayerMessageData msgData = new LoadCustomPlayerMessageData();
-            msgData.userId = DiscordIntegration.localId.SmallId;
+            msgData.userId = SteamIntegration.localId.SmallId;
             msgData.modelPath = Path.GetFileName(path);
 
             Node.activeNode.BroadcastMessage(SendType.Reliable, NetworkMessage.CreateMessage(CompatMessageType.PlayerModel, msgData).GetBytes());

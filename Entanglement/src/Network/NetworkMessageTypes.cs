@@ -43,6 +43,7 @@
             SpawnClient = 36,
             SpawnTransfer = 37,
             GripEvent = 38,
-            PlayerEvent = 39;
+            PlayerEvent = 39,
+            MessageRelay = 40;
     }
 }

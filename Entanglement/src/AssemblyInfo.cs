@@ -14,7 +14,7 @@ using Entanglement;
 [assembly: AssemblyVersion("0.3.0")]
 [assembly: AssemblyFileVersion("0.3.0")]
 
-[assembly: MelonInfo(typeof(EntanglementMod), "Entanglement", "0.3.0", "zCubed, Lakatrazz")]
+[assembly: MelonInfo(typeof(EntanglementMod), "Entanglement Steam Port", "0.3.0", "zCubed, Lakatrazz, notnotnotswipez, nptnc")]
 [assembly: MelonGame("Stress Level Zero", "BONEWORKS")]
 [assembly: MelonIncompatibleAssemblies("MultiplayerMod")]
 [assembly: MelonPriority(-10000)]

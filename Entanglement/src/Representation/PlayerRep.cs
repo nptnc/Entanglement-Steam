@@ -26,6 +26,7 @@ using StressLevelZero.SFX;
 using StressLevelZero.Combat;
 
 using ModThatIsNotMod;
+using Steamworks.Data;
 
 namespace Entanglement.Representation
 {
@@ -314,7 +315,7 @@ namespace Entanglement.Representation
 
             PlayerRepSyncData data = new PlayerRepSyncData();
 
-            data.userId = DiscordIntegration.localId.Id;
+            data.userId = SteamIntegration.localId.LargeId;
 
             for (int r = 0; r < data.simplifiedTransforms.Length; r++) {
                 data.simplifiedTransforms[r].position = syncedPoints[r].position;
@@ -350,12 +351,12 @@ namespace Entanglement.Representation
         }
 
         public static void SyncPlayerReps() {
-            if (DiscordIntegration.hasLobby) {
+            if (SteamIntegration.hasServer) {
                 var syncData = GetPlayerSyncData();
 
                 if (syncData != null) {
                     NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.PlayerRepSync, syncData);
-                    Node.activeNode.BroadcastMessage(NetworkChannel.Unreliable, message.GetBytes());
+                    Node.activeNode.BroadcastMessage(SendType.Unreliable, message.GetBytes());
                 }
                 else
                     GetPlayerTransforms();

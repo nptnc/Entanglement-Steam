@@ -18,7 +18,7 @@ namespace Entanglement.Extensions {
                 syncObj.SendEnqueue();
 
             else if (!rb.isKinematic) {
-                ulong ownerId = DiscordIntegration.localId.LargeId;
+                ulong ownerId = SteamIntegration.localId.LargeId;
 
                 ushort? objectId = null;
                 ushort callbackIndex = 0;

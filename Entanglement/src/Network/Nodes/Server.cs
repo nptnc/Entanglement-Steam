@@ -34,17 +34,20 @@ namespace Entanglement.Network
             if (instance != null)
                 instance.Shutdown();
 
-            if (DiscordIntegration.hasServer) {
+            if (SteamIntegration.hasServer) {
                 EntangleLogger.Error("Already in a server!");
                 return;
             }
             NetworkSender.serverSocket = SteamNetworkingSockets.CreateRelaySocket<ServerSocket>();
+            ConnectToServer(SteamClient.SteamId);
 
             EntangleLogger.Log($"Started a new server instance!");
             activeNode = instance = new Server();
 
             if (PlayerScripts.playerHealth)
                 PlayerScripts.playerHealth.reloadLevelOnDeath = false;
+
+            
         }
 
         //
@@ -52,15 +55,15 @@ namespace Entanglement.Network
         //
 
         private Server() {
-            DiscordIntegration.isHost = true;
-            DiscordIntegration.hasServer = true;
+            SteamIntegration.isHost = true;
+            SteamIntegration.hasServer = true;
         }
 
-        public override void Tick() {
+        public void Tick() {
             if (EntanglementMod.sceneChange != null) {
                 EntangleLogger.Log($"Notifying clients of scene change to {EntanglementMod.sceneChange}...");
 
-                LevelChangeMessageData levelChangeData = new LevelChangeMessageData() { sceneIndex = (byte)EntanglementMod.sceneChange, sceneReload = true };
+                LevelChangeMessageData levelChangeData = new LevelChangeMessageData() { sceneIndex = (byte) EntanglementMod.sceneChange, sceneReload = true };
                 NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.LevelChange, levelChangeData);
 
                 byte[] msgBytes = message.GetBytes();
@@ -68,26 +71,26 @@ namespace Entanglement.Network
 
                 EntanglementMod.sceneChange = null;
             }
-
-            base.Tick();
         }
 
         public void CloseLobby() {
             DisconnectMessageData disconnectData = new DisconnectMessageData();
-            disconnectData.disconnectReason = (byte)DisconnectReason.ServerClosed;
+            disconnectData.disconnectReason = (byte) DisconnectReason.ServerClosed;
 
-            NetworkMessage disconnectMsg = NetworkMessage.CreateMessage((byte)BuiltInMessageType.Disconnect, disconnectData);
+            NetworkMessage disconnectMsg = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Disconnect, disconnectData);
             byte[] disconnectBytes = disconnectMsg.GetBytes();
             NetworkSender.BroadcastMessageExceptSelf(disconnectBytes);
 
             NetworkSender.serverSocket.Close();
             NetworkSender.serverSocket = null;
+            SteamIntegration.hasServer = false;
+            SteamIntegration.isHost = false;
 
             CleanData();
         }
 
         public override void Shutdown() {
-            if (DiscordIntegration.hasServer && !DiscordIntegration.isHost) {
+            if (SteamIntegration.hasServer && !SteamIntegration.isHost) {
                 EntangleLogger.Error("Unable to close the server as a client!");
                 return;
             }
@@ -99,7 +102,11 @@ namespace Entanglement.Network
             activeNode = Client.instance;
         }
 
-        public override void BroadcastMessage(SendType channel, byte[] data) => BroadcastMessageP2P(channel, data);
+        public override void BroadcastMessage(SendType channel, byte[] data)
+        {
+            // Except self (We are the host so we are also a connection)
+            BroadcastMessageExcept(channel, data, SteamClient.SteamId);
+        }
 
         // Unique to a server host; allows preventing a message sent to the host being sent back
         public void BroadcastMessageExcept(SendType channel, byte[] data, ulong toIgnore)

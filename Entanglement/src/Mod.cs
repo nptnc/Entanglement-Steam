@@ -23,6 +23,8 @@ using Entanglement.Managers;
 using ModThatIsNotMod;
 
 using UnityEngine;
+using Entanglement.src.Network;
+using Steamworks;
 
 // This mod is not a rewrite of the multiplayer mod!
 // It is another MP mod made by an ex developer of the MP mod that was unsatisfied with the original mod's codebase
@@ -51,8 +53,15 @@ namespace Entanglement {
         public static bool hasUnpatched = false;
 
         public override void OnApplicationStart() {
-            entanglementAssembly = Assembly.GetExecutingAssembly();
             Instance = this;
+            entanglementAssembly = Assembly.GetExecutingAssembly();
+
+            SteamAPILoader.LoadSteamAPI();
+            SteamIntegration.Initialize();
+            MelonLogger.Log("Steam api initialized");
+
+            
+            
 
             VersionString = $"{EntanglementVersion.versionMajor}.{EntanglementVersion.versionMinor}.{EntanglementVersion.versionPatch}";
 
@@ -63,17 +72,17 @@ namespace Entanglement {
             VersionChecking.CheckModVersion(this, "https://boneworks.thunderstore.io/package/Entanglement/Entanglement/");
 
             PersistentData.Initialize();
-            GameSDK.LoadGameSDK();
+            
 
 #if DEBUG
             EntangleLogger.Log("Entanglement Debug Build!", ConsoleColor.Blue);
 #endif
 
-            DiscordIntegration.Initialize();
+            
 
-            // This checks if Discord has an invalid instance, so that the game can proceed without freezing
-            if (DiscordIntegration.isInvalid) {
-                EntangleNotif.InvalidDiscord();
+            // This checks if Steam has an invalid instance, so that the game can proceed without freezing
+            if (SteamIntegration.isInvalid) {
+                EntangleNotif.InvalidSteam();
                 return; 
             }
 
@@ -97,7 +106,7 @@ namespace Entanglement {
 
         // Unpatch methods if discord isn't found
         public override void OnApplicationLateStart() {
-            if (DiscordIntegration.isInvalid) {
+            if (SteamIntegration.isInvalid) {
                 HarmonyInstance.UnpatchSelf();
                 hasUnpatched = true;
             }
@@ -107,13 +116,17 @@ namespace Entanglement {
         }
 
         public override void OnUpdate() {
-            if (DiscordIntegration.isInvalid) {
+            if (SteamIntegration.isInvalid) {
                 if (!hasUnpatched) {
                     HarmonyInstance.UnpatchSelf();
                     hasUnpatched = true;
                 }
                 return; 
             }
+
+            NetworkSender.clientSocket?.Receive(256);
+            NetworkSender.serverSocket?.Receive(256);
+            SteamClient.RunCallbacks();
 
             ModuleHandler.Update();
 
@@ -139,7 +152,7 @@ namespace Entanglement {
         }
 
         public override void OnFixedUpdate() {
-            if (DiscordIntegration.isInvalid) return;
+            if (SteamIntegration.isInvalid) return;
 
             ModuleHandler.FixedUpdate();
 
@@ -148,11 +161,12 @@ namespace Entanglement {
         }
 
         public override void OnLateUpdate() {
-            if (DiscordIntegration.isInvalid) return;
+            if (SteamIntegration.isInvalid) return;
             
             ModuleHandler.LateUpdate();
 
-            Client.instance?.Tick();
+            
+
             Server.instance?.Tick();
 
             // This will update and flush discords callbacks, not needed for steam
@@ -168,7 +182,7 @@ namespace Entanglement {
         }
         
         public override void OnSceneWasInitialized(int buildIndex, string sceneName) {
-            if (DiscordIntegration.isInvalid) return;
+            if (SteamIntegration.isInvalid) return;
 
             ModuleHandler.OnSceneWasInitialized(buildIndex, sceneName);
 
@@ -186,7 +200,7 @@ namespace Entanglement {
         }
 
         public override void BONEWORKS_OnLoadingScreen() {
-            if (DiscordIntegration.isInvalid) return;
+            if (SteamIntegration.isInvalid) return;
 
             ModuleHandler.OnLoadingScreen();
 
@@ -201,12 +215,12 @@ namespace Entanglement {
         }
 
         public override void OnApplicationQuit() {
-            if (DiscordIntegration.isInvalid) return;
+            if (SteamIntegration.isInvalid) return;
 
             ModuleHandler.OnApplicationQuit();
 
             Node.activeNode.Shutdown();
-            DiscordIntegration.Shutdown();
+            SteamIntegration.Shutdown();
         }
     }
 }

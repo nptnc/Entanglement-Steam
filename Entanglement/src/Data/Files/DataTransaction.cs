@@ -56,7 +56,7 @@ namespace Entanglement.Data {
 
         public static void Process() {
             if (Node.activeNode == null) return;
-            if (!DiscordIntegration.hasServer) return;
+            if (!SteamIntegration.hasServer) return;
             if (outgoingTransactions.Count() <= 0) return;
 
             DataTransaction outgoing = outgoingTransactions.Peek();

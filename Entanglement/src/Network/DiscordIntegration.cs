@@ -11,14 +11,16 @@ using UnityEngine;
 
 using Entanglement.UI;
 using Entanglement.Extensions;
+using Steamworks;
 
 namespace Entanglement.Network
 {
-    public static class DiscordIntegration
+    public static class SteamIntegration
     {
         public static bool hasServer;
         public static bool isHost;
         public static PlayerId localId;
+        public static bool isInvalid = false;
 
         public static byte GetByteId(ulong userId)
         {
@@ -38,6 +40,16 @@ namespace Entanglement.Network
                 return PlayerIds.GetPlayerFromSmallId(byteId).LargeId;
             }
             return 0;
+        }
+
+        public static void Initialize() {
+            // Steam VR AppID
+            SteamClient.Init(823500);
+        }
+
+        public static void Shutdown()
+        {
+            SteamClient.Cleanup();
         }
     }
 }

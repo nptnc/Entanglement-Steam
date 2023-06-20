@@ -40,6 +40,8 @@ namespace Entanglement.Network
             if (GetPlayerFromLargeId(largeId) != null)
                 return null;
 
+            EntangleLogger.Log($"Registered {userName} with large id {largeId} and smallId {smallId}");
+
             PlayerId playerId = new PlayerId(largeId, smallId, userName);
             playerIds.Add(playerId);
             return playerId;

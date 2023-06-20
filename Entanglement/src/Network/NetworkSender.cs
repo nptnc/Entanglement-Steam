@@ -1,4 +1,5 @@
 ﻿using Entanglement.Network;
+using Entanglement.src.Network.Messages.Redirect;
 using Entanglement.src.Network.Steam;
 using Oculus.Platform;
 using Steamworks;
@@ -21,7 +22,22 @@ namespace Entanglement.src.Network
 
         public static void BroadcastMessage(byte[] packet, SendType sendType = SendType.Reliable)
         {
-            if (DiscordIntegration.isHost)
+            if (SteamIntegration.isHost)
+            {
+                foreach (var connection in connections)
+                {
+                    connection.Value.SendMessage(packet);
+                }
+            }
+            else
+            {
+                clientSocket?.Connection.SendMessage(packet, sendType);
+            }
+        }
+
+        public static void BroadcastMessageDirectRelay(byte[] packet, SendType sendType = SendType.Reliable)
+        {
+            if (SteamIntegration.isHost)
             {
                 foreach (var connection in connections)
                 {
@@ -36,7 +52,7 @@ namespace Entanglement.src.Network
 
         public static void BroadcastMessageExceptSelf(byte[] packet, SendType sendType = SendType.Reliable)
         {
-            if (DiscordIntegration.isHost)
+            if (SteamIntegration.isHost)
             {
                 foreach (var connection in connections)
                 {
@@ -47,13 +63,26 @@ namespace Entanglement.src.Network
             }
             else
             {
-                clientSocket?.Connection.SendMessage(packet, sendType);
+                List<ulong> ulongs = new List<ulong>();
+
+                foreach (PlayerId playerId in PlayerIds.playerIds) {
+                    ulongs.Add(playerId.LargeId);
+                }
+
+                MessageRedirectData redirectData = new MessageRedirectData()
+                {
+                    toSendTo = ulongs,
+                    data = packet
+                };
+
+                NetworkMessage idMessage = NetworkMessage.CreateMessage((byte) BuiltInMessageType.MessageRelay, redirectData);
+                SendMessageToServer(SendType.Reliable, idMessage.GetBytes());
             }
         }
 
         public static void BroadcastMessageExcept(byte[] packet, SteamId steamId, SendType sendType = SendType.Reliable)
         {
-            if (DiscordIntegration.isHost)
+            if (SteamIntegration.isHost)
             {
                 foreach (var connection in connections)
                 {
@@ -66,17 +95,34 @@ namespace Entanglement.src.Network
         }
 
         public static void SendMessageToClient(ulong userId, SendType sendType, byte[] packet) {
-            if (DiscordIntegration.isHost)
+            if (SteamIntegration.isHost)
             {
-                if (connections.ContainsKey(userId)) {
+                if (connections.ContainsKey(userId))
+                {
                     connections[userId].SendMessage(packet, sendType);
                 }
+            }
+            else {
+
+                List<ulong> ulongs = new List<ulong>
+                {
+                    userId
+                };
+
+                MessageRedirectData redirectData = new MessageRedirectData()
+                {
+                    toSendTo = ulongs,
+                    data = packet
+                };
+
+                NetworkMessage idMessage = NetworkMessage.CreateMessage((byte) BuiltInMessageType.MessageRelay, redirectData);
+                SendMessageToServer(SendType.Reliable, idMessage.GetBytes());
             }
         }
 
         public static void SendMessageToSelfClient(SendType sendType, byte[] packet)
         {
-            if (DiscordIntegration.isHost)
+            if (SteamIntegration.isHost)
             {
                 SendMessageToClient(SteamClient.SteamId, sendType, packet);
             }

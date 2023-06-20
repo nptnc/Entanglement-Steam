@@ -24,7 +24,7 @@ namespace Entanglement.Network
             message.messageData = new byte[sizeof(byte) * 2 + sizeof(ushort)];
 
             int index = 0;
-            message.messageData[index++] = DiscordIntegration.GetByteId(data.userId);
+            message.messageData[index++] = SteamIntegration.GetByteId(data.userId);
 
             message.messageData[index++] = (byte)data.hand;
 
@@ -48,7 +48,7 @@ namespace Entanglement.Network
             }
 
             int index = 0;
-            ulong userId = DiscordIntegration.GetLongId(message.messageData[index++]);
+            ulong userId = SteamIntegration.GetLongId(message.messageData[index++]);
 
             if (PlayerRepresentation.representations.ContainsKey(userId))
             {

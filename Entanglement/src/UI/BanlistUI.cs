@@ -11,9 +11,9 @@ using ModThatIsNotMod.BoneMenu;
 
 using UnityEngine;
 
-using Discord;
 
 using MelonLoader;
+using Steamworks;
 
 namespace Entanglement.UI
 {
@@ -39,7 +39,7 @@ namespace Entanglement.UI
             ClearPlayers();
 
             foreach (var user in BanList.bannedUsers) {
-                AddUser(new User() { Id = user.Item1, Username = user.Item2 });
+                AddUser(new Friend(user.Item1));
             }
 
             UpdateMenu();
@@ -47,13 +47,13 @@ namespace Entanglement.UI
 
         public static void UpdateMenu() => MenuManager.OpenCategory(banCategory);
 
-        public static void AddUser(User player)
+        public static void AddUser(Friend player)
         {
-            string playerName = $"{player.Username}";
+            string playerName = $"{player.Name}";
 
             MenuCategory userItem = banCategory.CreateSubCategory(playerName, Color.white);
             userItem.CreateFunctionElement("Unban", Color.red, () => {
-                BanList.UnbanUser(player);
+                BanList.UnbanUser(new PlayerId(player.Id, 0, player.Name));
                 Refresh();
             });
         }
