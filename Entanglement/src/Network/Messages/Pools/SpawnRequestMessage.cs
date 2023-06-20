@@ -15,6 +15,8 @@ using StressLevelZero.Data;
 using UnityEngine;
 
 using MelonLoader;
+using Steamworks.Data;
+using Entanglement.src.Network;
 
 namespace Entanglement.Network
 {
@@ -46,6 +48,8 @@ namespace Entanglement.Network
                 throw new IndexOutOfRangeException();
 
             if (isServerHandled) {
+                byte[] msgBytes = message.GetBytes();
+                NetworkSender.SendMessageToSelfClient(SendType.Reliable, msgBytes);
                 return;
             }
 
