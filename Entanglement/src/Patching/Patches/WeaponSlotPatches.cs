@@ -14,13 +14,14 @@ using Entanglement.Objects;
 using System.Collections;
 
 using MelonLoader;
+using Steamworks.Data;
 
 namespace Entanglement.Patching
 {
     [HarmonyPatch(typeof(HandWeaponSlotReciever), "MakeStatic")]
     public static class WeaponInsertPatch {
         public static void Prefix(this HandWeaponSlotReciever __instance) {
-            if (!DiscordIntegration.hasLobby)
+            if (!NetworkInfo.hasLobby)
                 return;
 
             TransformSyncable tran;
@@ -28,7 +29,7 @@ namespace Entanglement.Patching
                 TransformCollisionMessageData data = new TransformCollisionMessageData() { objectId = tran.objectId, enabled = false };
 
                 NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformCollision, data);
-                Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
             }
         }
     }
@@ -36,7 +37,7 @@ namespace Entanglement.Patching
     [HarmonyPatch(typeof(HandWeaponSlotReciever), "MakeDynamic")]
     public static class WeaponExitPatch {
         public static void Prefix(this HandWeaponSlotReciever __instance) {
-            if (!DiscordIntegration.hasLobby)
+            if (!NetworkInfo.hasLobby)
                 return;
 
             TransformSyncable tran;
@@ -44,7 +45,7 @@ namespace Entanglement.Patching
                 TransformCollisionMessageData data = new TransformCollisionMessageData() { objectId = tran.objectId, enabled = true };
 
                 NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformCollision, data);
-                Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+                Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
             }
         }
     }

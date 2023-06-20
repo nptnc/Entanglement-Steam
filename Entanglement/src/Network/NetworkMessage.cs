@@ -106,7 +106,7 @@ namespace Entanglement.Network
 
         public static void ReadMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
             try {
-                handlers[message.messageType].ReadMessage(message, sender);
+                handlers[message.messageType].ReadMessage(message, sender, isServerHandled);
             }
             catch (Exception e) {
                 EntangleLogger.Error($"Failed handling network message with reason: {e.Message}\nTrace:{e.StackTrace}");

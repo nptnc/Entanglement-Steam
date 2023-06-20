@@ -19,6 +19,8 @@ using StressLevelZero.Props;
 using Utilties;
 
 using MelonLoader;
+using Steamworks.Data;
+using Socket = StressLevelZero.Interaction.Socket;
 
 namespace Entanglement.Objects
 {
@@ -68,7 +70,7 @@ namespace Entanglement.Objects
             };
 
             NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformSync, syncData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Unreliable, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Unreliable, message.GetBytes());
 
             if (targetGo) {
                 targetGo.transform.position = transform.position;
@@ -83,7 +85,7 @@ namespace Entanglement.Objects
         public bool HasChangedPositions() => (transform.position - lastPosition).sqrMagnitude > 0.001f || Quaternion.Angle(transform.rotation, lastRotation) > 0.05f;
 
         protected override void UpdateOwner(bool checkForMag = true) {
-            if (lastOwner == DiscordIntegration.localId.Id) objectHealth = GetHealth();
+            if (lastOwner == DiscordIntegration.localId.LargeId) objectHealth = GetHealth();
 
             if (!IsOwner()) SetHealth(float.PositiveInfinity);
             else SetHealth(objectHealth);
@@ -107,7 +109,7 @@ namespace Entanglement.Objects
                 } catch { }
             }
 
-            if (_CachedPlug && lastOwner != staleOwner && staleOwner == DiscordIntegration.localId.Id) {
+            if (_CachedPlug && lastOwner != staleOwner && staleOwner == DiscordIntegration.localId.LargeId) {
                 Socket plugSocket = _CachedPlug._lastSocket;
                 if (_CachedPlug.InGun()) {
                     _CachedPlug.ForceEject();
@@ -134,7 +136,7 @@ namespace Entanglement.Objects
         }
 
         protected virtual void OnCollisionEnter(Collision collision) {
-            if (!DiscordIntegration.hasLobby)
+            if (!NetworkInfo.hasLobby)
                 return;
 
             if (collision.collider.gameObject.IsBlacklisted()) return;
@@ -148,7 +150,7 @@ namespace Entanglement.Objects
 
             Rigidbody[] rigidbodies = null;
 
-            long ownerId = DiscordIntegration.localId.Id;
+            ulong ownerId = DiscordIntegration.localId.LargeId;
 
             ObjectSync.GetPooleeData(targetObj, out rigidbodies, out string overrideRootName, out short spawnIndex, out float spawnTime);
 
@@ -181,7 +183,7 @@ namespace Entanglement.Objects
                     };
 
                     NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformCreate, createSync);
-                    Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+                    Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
                 }
             }
         }
@@ -257,7 +259,7 @@ namespace Entanglement.Objects
         public override void SendDequeue() => MelonCoroutines.Start(WaitUntilValid(OnValidDequeue));
 
         public void OnValidEnqueue() {
-            long userId = DiscordIntegration.localId.Id;
+            ulong userId = DiscordIntegration.localId.LargeId;
             if (ownerQueue.Contains(userId))
                 return;
 
@@ -272,11 +274,11 @@ namespace Entanglement.Objects
                 isAdd = true
             };
             NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformQueue, queueData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
         }
 
         public void OnValidDequeue() {
-            long userId = DiscordIntegration.localId.Id;
+            ulong userId = DiscordIntegration.localId.LargeId;
             if (!ownerQueue.Contains(userId))
                 return;
 
@@ -291,7 +293,7 @@ namespace Entanglement.Objects
                 isAdd = false
             };
             NetworkMessage message = NetworkMessage.CreateMessage(BuiltInMessageType.TransformQueue, queueData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Object, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
         }
 
         public IEnumerator WaitUntilValid(Action onFinish) {
@@ -302,7 +304,7 @@ namespace Entanglement.Objects
         }
 
         public void ApplyTransform(SimplifiedTransform simplifiedTransform) {
-            if (DiscordIntegration.localId.Id == staleOwner || (_CachedPlug && _CachedPlug.EnteringOrInside())) return;
+            if (DiscordIntegration.localId.LargeId == staleOwner || (_CachedPlug && _CachedPlug.EnteringOrInside())) return;
 
             if (targetBody) simplifiedTransform.Apply(targetBody);
             if (!rb) simplifiedTransform.Apply(transform);

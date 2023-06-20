@@ -13,8 +13,9 @@ using HarmonyLib;
 
 using Entanglement.Objects;
 using Entanglement.Network;
-
+using Steamworks.Data;
 using UnityEngine;
+using Socket = StressLevelZero.Interaction.Socket;
 
 namespace Entanglement.Patching {
     public static class Magazine_Settings {
@@ -78,7 +79,7 @@ namespace Entanglement.Patching {
                 isInsert = false,
             };
             NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.MagazinePlug, plugData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
 
 #if DEBUG
             EntangleLogger.Log($"Magazine exited from {__instance.name}! Magazine id is {plugData.magId} and gun id is {plugData.gunId}.");
@@ -121,7 +122,7 @@ namespace Entanglement.Patching {
             };
 
             NetworkMessage message = NetworkMessage.CreateMessage((byte)BuiltInMessageType.MagazinePlug, plugData);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, message.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, message.GetBytes());
 
 #if DEBUG
             EntangleLogger.Log($"Magazine inserted into {__instance.name}! Magazine id is {plugData.magId} and gun id is {plugData.gunId}.");

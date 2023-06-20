@@ -9,7 +9,7 @@ using HarmonyLib;
 using MelonLoader;
 
 using Entanglement.Network;
-
+using Steamworks.Data;
 using UnityEngine.EventSystems;
 
 using StressLevelZero.Arena;
@@ -25,7 +25,7 @@ namespace Entanglement.Patching
             });
 
             byte[] msgBytes = message.GetBytes();
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+            Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
         }
 
         public static void SendDifficulty(byte difficulty) {
@@ -34,7 +34,7 @@ namespace Entanglement.Patching
             });
 
             byte[] msgBytes = message.GetBytes();
-            Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+            Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
         }
     }
 
@@ -58,7 +58,7 @@ namespace Entanglement.Patching
                 });
 
                 byte[] msgBytes = message.GetBytes();
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+                Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
             }
         }
     }

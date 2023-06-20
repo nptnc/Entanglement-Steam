@@ -16,7 +16,6 @@ using UnityEngine;
 
 using MelonLoader;
 using Steamworks.Data;
-using Entanglement.src.Network;
 
 namespace Entanglement.Network
 {
@@ -48,12 +47,6 @@ namespace Entanglement.Network
                 throw new IndexOutOfRangeException();
 
             if (isServerHandled) {
-                byte[] msgBytes = message.GetBytes();
-                NetworkSender.SendMessageToSelfClient(SendType.Reliable, msgBytes);
-                return;
-            }
-
-            if (Node.isServer) {
                 byte[] transformBytes = new byte[SimplifiedTransform.size];
                 int index = 0;
 
@@ -142,7 +135,7 @@ namespace Entanglement.Network
             };
 
             NetworkMessage clientMessage = NetworkMessage.CreateMessage(BuiltInMessageType.SpawnClient, data);
-            Node.activeNode.BroadcastMessage(NetworkChannel.Object, clientMessage.GetBytes());
+            Node.activeNode.BroadcastMessage(SendType.Reliable, clientMessage.GetBytes());
         }
     }
 

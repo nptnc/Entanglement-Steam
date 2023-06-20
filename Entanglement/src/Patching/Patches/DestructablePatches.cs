@@ -13,7 +13,7 @@ using Entanglement.Network;
 using MelonLoader;
 
 using HarmonyLib;
-
+using Steamworks.Data;
 using UnityEngine;
 
 namespace Entanglement.Patching {
@@ -26,7 +26,7 @@ namespace Entanglement.Patching {
         }
 
         public static void Postfix(Prop_Health __instance) {
-            if (!DiscordIntegration.hasLobby) return;
+            if (!NetworkInfo.hasLobby) return;
 
             TransformSyncable syncTransform = TransformSyncable.DestructCache.Get(__instance.gameObject);
             if (syncTransform) {
@@ -38,7 +38,7 @@ namespace Entanglement.Patching {
                 });
 
                 byte[] msgBytes = message.GetBytes();
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+                Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
             }
         }
     }
@@ -46,7 +46,7 @@ namespace Entanglement.Patching {
     [HarmonyPatch(typeof(ObjectDestructable), "TakeDamage")]
     public static class DestructablePatch {
         public static void Postfix(ObjectDestructable __instance, Vector3 normal, float damage, bool crit = false, AttackType attackType = default) {
-            if (!DiscordIntegration.hasLobby) return;
+            if (!NetworkInfo.hasLobby) return;
 
             if (!__instance._isDead) return;
 
@@ -60,7 +60,7 @@ namespace Entanglement.Patching {
                 });
 
                 byte[] msgBytes = message.GetBytes();
-                Node.activeNode.BroadcastMessage(NetworkChannel.Reliable, msgBytes);
+                Node.activeNode.BroadcastMessage(SendType.Reliable, msgBytes);
             }
         }
     }
