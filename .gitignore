@@ -358,3 +358,4 @@ MigrationBackup/
 .ionide/
 
 playerrep.eres
+Examples/OptionalDependency/Modules/ExampleModule.dll
