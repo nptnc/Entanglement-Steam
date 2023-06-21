@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Entanglement.Representation;
 using Entanglement.Network;
 
 namespace Entanglement.Network

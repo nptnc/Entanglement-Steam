@@ -15,7 +15,7 @@ namespace Entanglement.Data
             string sdkPath = PersistentData.GetPath("steam_api64.dll");
             if (!File.Exists(sdkPath))
             {
-                MelonLogger.Log("Steam API was missing, autoextracting it!");
+                EntangleLogger.Log("Steam API was missing, autoextracting it!");
                 File.WriteAllBytes(sdkPath, EmbeddedResource.LoadFromAssembly(EntanglementMod.entanglementAssembly, "Entanglement.resources.steam_api64.dll"));
             }
 

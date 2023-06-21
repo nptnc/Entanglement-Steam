@@ -571,7 +571,6 @@
     <Compile Include="src\Network\Messages\Server\SpawnObjectMessage.cs" />
     <Compile Include="src\Data\Containers\DataCorruptionException.cs" />
     <Compile Include="src\Network\Net.cs" />
-    <Compile Include="src\Network\NetworkInfo.cs" />
     <Compile Include="src\Network\NetworkMessageTypes.cs" />
     <Compile Include="src\Network\NetworkSender.cs" />
     <Compile Include="src\Network\Nodes\Client.cs" />

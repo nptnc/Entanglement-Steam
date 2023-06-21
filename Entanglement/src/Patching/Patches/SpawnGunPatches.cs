@@ -21,7 +21,7 @@ namespace Entanglement.Patching
     public class SpawnFirePatch
     {
         public static void Postfix(SpawnGun __instance) {
-            if (!NetworkInfo.hasLobby)
+            if (!SteamIntegration.hasServer)
                 return;
 
             MelonCoroutines.Start(SpawnGunFire(__instance));
