@@ -44,7 +44,7 @@ namespace Entanglement.Network
 
         public static void Initialize() {
             // Steam VR AppID
-            SteamClient.Init(823500);
+            SteamClient.Init(480);//823500);
             
             // testing purposes
             Debug.Log(SteamClient.Name);

@@ -40,10 +40,14 @@ namespace Entanglement.Network
 
             if (isServerHandled)
             {
+                EntangleLogger.Log("Received registration",System.ConsoleColor.Magenta);
+                
                 byte[] msgBytes = message.GetBytes();
                 Server.instance.BroadcastMessageExcept(SendType.Reliable, msgBytes, sender);
                 return;
             }
+            else
+                EntangleLogger.Log("Received registration",System.ConsoleColor.Blue);
 
             ByteBuffer byteBuffer = new ByteBuffer(message.messageData);
             byte byteId = byteBuffer.ReadByte();

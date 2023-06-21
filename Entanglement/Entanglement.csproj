@@ -607,7 +607,7 @@
     <Compile Include="src\Patching\Patches\ZombieArenaPatches.cs" />
     <Compile Include="src\Patching\Patches\ZonePatches.cs" />
     <Compile Include="src\Representation\PlayerRep.cs" />
-    <Compile Include="src\Network\DiscordIntegration.cs" />
+    <Compile Include="src\Network\SteamIntegration.cs" />
     <Compile Include="src\Network\Messages\Server\ConnectionMessage.cs" />
     <Compile Include="src\Network\NetworkMessage.cs" />
     <Compile Include="src\Network\NetworkMessageHandler.cs" />

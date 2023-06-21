@@ -10,6 +10,7 @@ using MelonLoader;
 using Entanglement.Data;
 using Entanglement.src.Network;
 using Steamworks.Data;
+using ConsoleColor = Il2CppSystem.ConsoleColor;
 
 namespace Entanglement.Network {
     public class ConnectionMessageHandler : NetworkMessageHandler<ConnectionMessageData> {
@@ -35,6 +36,8 @@ namespace Entanglement.Network {
             if (!isServerHandled) {
                 return;
             }
+            
+            EntangleLogger.Log("Received connection message",System.ConsoleColor.Blue);
 
             byte clientVersionMajor = message.messageData[0];
             byte clientVersionMinor = message.messageData[1];
