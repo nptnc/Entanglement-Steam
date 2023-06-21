@@ -97,9 +97,11 @@ namespace Entanglement.src.Network
         public static void SendMessageToClient(ulong userId, SendType sendType, byte[] packet) {
             if (SteamIntegration.isHost)
             {
+                EntangleLogger.Log("Sending message to client " + userId + " as host!");
                 if (connections.ContainsKey(userId))
                 {
                     connections[userId].SendMessage(packet, sendType);
+                    EntangleLogger.Log("SENT message to client " + userId + " as host! (We have their connection)");
                 }
             }
             else {
