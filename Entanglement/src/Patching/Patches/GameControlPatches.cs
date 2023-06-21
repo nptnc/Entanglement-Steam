@@ -9,7 +9,7 @@ namespace Entanglement.Patching {
     [HarmonyPatch(typeof(GameControl), "RELOADLEVEL")]
     public static class ReloadLevelPatch {
         public static bool Prefix() {
-            if (NetworkInfo.hasLobby)
+            if (SteamIntegration.hasServer)
                 return false;
             return true;
         }

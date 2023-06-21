@@ -26,7 +26,7 @@ namespace Entanglement.Patching {
         }
 
         public static void Postfix(Prop_Health __instance) {
-            if (!NetworkInfo.hasLobby) return;
+            if (!SteamIntegration.hasServer) return;
 
             TransformSyncable syncTransform = TransformSyncable.DestructCache.Get(__instance.gameObject);
             if (syncTransform) {
@@ -46,7 +46,7 @@ namespace Entanglement.Patching {
     [HarmonyPatch(typeof(ObjectDestructable), "TakeDamage")]
     public static class DestructablePatch {
         public static void Postfix(ObjectDestructable __instance, Vector3 normal, float damage, bool crit = false, AttackType attackType = default) {
-            if (!NetworkInfo.hasLobby) return;
+            if (!SteamIntegration.hasServer) return;
 
             if (!__instance._isDead) return;
 

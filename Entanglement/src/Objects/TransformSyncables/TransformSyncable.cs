@@ -136,7 +136,7 @@ namespace Entanglement.Objects
         }
 
         protected virtual void OnCollisionEnter(Collision collision) {
-            if (!NetworkInfo.hasLobby)
+            if (!SteamIntegration.hasServer)
                 return;
 
             if (collision.collider.gameObject.IsBlacklisted()) return;

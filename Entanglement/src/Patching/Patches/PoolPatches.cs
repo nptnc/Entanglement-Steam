@@ -117,7 +117,7 @@ namespace Entanglement.Patching {
         }
 
         public static void OnSpawn(GameObject spawnedObject, Pool pool) {
-            if (!NetworkInfo.hasLobby || SpawnManager.SpawnOverride)
+            if (!SteamIntegration.hasServer || SpawnManager.SpawnOverride)
                 return;
 
             // We don't want to dupe items

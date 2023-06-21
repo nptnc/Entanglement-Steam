@@ -58,10 +58,7 @@ namespace Entanglement {
 
             SteamAPILoader.LoadSteamAPI();
             SteamIntegration.Initialize();
-            MelonLogger.Log("Steam api initialized");
-
-            
-            
+            EntangleLogger.Log("Steam api initialized");
 
             VersionString = $"{EntanglementVersion.versionMajor}.{EntanglementVersion.versionMinor}.{EntanglementVersion.versionPatch}";
 

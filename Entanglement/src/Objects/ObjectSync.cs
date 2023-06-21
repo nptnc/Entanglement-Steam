@@ -135,7 +135,7 @@ namespace Entanglement.Objects
         }
 
         public static void OnGripAttached(GameObject grip) {
-            if (!NetworkInfo.hasLobby)
+            if (!SteamIntegration.hasServer)
                 return;
 
             MelonCoroutines.Start(OnGripValid(grip));
@@ -159,7 +159,7 @@ namespace Entanglement.Objects
         }
 
         public static void OnGripDetached(Hand __instance) {
-            if (!NetworkInfo.hasLobby)
+            if (!SteamIntegration.hasServer)
                 return;
 
             GameObject currentObject = __instance.m_CurrentAttachedObject;
@@ -180,7 +180,7 @@ namespace Entanglement.Objects
         }
 
         public static void OnForcePullCancelled(GameObject grip) {
-            if (!NetworkInfo.hasLobby)
+            if (!SteamIntegration.hasServer)
                 return;
 
             if (grip.IsBlacklisted()) return;
