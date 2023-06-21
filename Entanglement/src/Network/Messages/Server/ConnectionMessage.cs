@@ -74,10 +74,14 @@ namespace Entanglement.Network {
                 return;
             }
 
+            EntangleLogger.Log($"Client got through all checks!");
+
             // They made it through the checks
             LevelChangeMessageData levelChangeData = new LevelChangeMessageData() { sceneIndex = (byte) StressLevelZero.Utilities.BoneworksSceneManager.currentSceneIndex };
             NetworkMessage levelChangeMessage = NetworkMessage.CreateMessage(BuiltInMessageType.LevelChange, levelChangeData);
             Node.activeNode.SendMessage(sender, SendType.Reliable, levelChangeMessage.GetBytes());
+
+            EntangleLogger.Log($"Sent level change message to {sender}!");
 
             foreach (PlayerId playerId in PlayerIds.playerIds)
             {
@@ -98,8 +102,10 @@ namespace Entanglement.Network {
                 username = username
             };
 
+            EntangleLogger.Log($"Sent registration message to {sender}!");
+
             NetworkMessage idMessage = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Registration, idMessageData);
-            Server.instance?.BroadcastMessage(SendType.Reliable, idMessage.GetBytes());
+            NetworkSender.BroadcastMessage(idMessage.GetBytes(), SendType.Reliable);
         }
     }
 
