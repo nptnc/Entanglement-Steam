@@ -313,6 +313,10 @@ namespace Entanglement.Representation
                 if (syncPoint == null)
                     return null;
 
+            if (SteamIntegration.localId == null) {
+                return null;
+            }
+
             PlayerRepSyncData data = new PlayerRepSyncData();
 
             data.userId = SteamIntegration.localId.LargeId;
