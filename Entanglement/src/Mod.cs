@@ -215,8 +215,8 @@ namespace Entanglement {
 
             PlayerRepresentation.GetPlayerTransforms();
 
-            foreach (var rep in PlayerRepresentation.representations.Values)
-                rep.RecreateRepresentations();
+            /*foreach (var rep in PlayerRepresentation.representations.Values)
+                rep.RecreateRepresentations();*/
 
             Client.instance.currentScene = (byte)buildIndex;
             sceneChange = (byte)buildIndex;

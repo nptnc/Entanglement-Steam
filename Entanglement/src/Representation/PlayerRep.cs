@@ -99,6 +99,7 @@ namespace Entanglement.Representation
         public PlayerRepresentation(string playerName, ulong playerId) {
             this.playerName = playerName;
             this.playerId = playerId;
+            EntangleLogger.Log("Made player rep with playername: " + playerName + " and playerId: " + playerId);
             RecreateRepresentations();
         }
 
@@ -159,6 +160,9 @@ namespace Entanglement.Representation
 
                 if (isCustomSkinned && currentSkinPath != null)
                     PlayerSkinLoader.ApplyPlayermodel(this, currentSkinPath);
+
+                GameObject.DontDestroyOnLoad(repRoot.gameObject);
+                GameObject.DontDestroyOnLoad(repCanvas);
             }
             catch {
                 EntangleLogger.Error($"Error caught creating rep from user {playerId}");

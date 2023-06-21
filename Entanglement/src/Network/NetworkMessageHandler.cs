@@ -31,7 +31,8 @@ namespace Entanglement.Network
         // This is like super messy but i'll clean it up later
         // I'm not good at modular stuff - Lakatrazz
         public void ReadMessage(NetworkMessage message, ulong sender, bool isServerHandled) {
-            if (SceneLoader.loading) {
+            if (SceneLoader.loading)
+            {
                 if (Attributes.Contains(typeof(Net.SkipHandleOnLoading)))
                     return;
                 else if (Attributes.Contains(typeof(Net.HandleOnLoaded)))

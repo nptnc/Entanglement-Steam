@@ -53,6 +53,7 @@ namespace Entanglement.src.Network.Steam
             for (int b = sizeof(byte); b < messageData.Length; b++)
                 message.messageData[b - sizeof(byte)] = messageData[b];
 
+
             NetworkMessage.ReadMessage(message, identity.steamid, true);
 
             base.OnMessage(connection, identity, data, size, messageNum, recvTime, channel);
@@ -90,8 +91,6 @@ namespace Entanglement.src.Network.Steam
 
         public override void OnMessage(IntPtr olddata, int size, Int64 messageNum, Int64 recvTime, int channel)
         {
-            
-            
             var data = new byte[size];
             Marshal.Copy(olddata, data, 0, size);
 

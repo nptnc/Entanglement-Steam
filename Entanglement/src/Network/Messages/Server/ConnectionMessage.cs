@@ -77,9 +77,7 @@ namespace Entanglement.Network {
             EntangleLogger.Log($"Client got through all checks!");
 
             // They made it through the checks
-            LevelChangeMessageData levelChangeData = new LevelChangeMessageData() { sceneIndex = (byte) StressLevelZero.Utilities.BoneworksSceneManager.currentSceneIndex };
-            NetworkMessage levelChangeMessage = NetworkMessage.CreateMessage(BuiltInMessageType.LevelChange, levelChangeData);
-            Node.activeNode.SendMessage(sender, SendType.Reliable, levelChangeMessage.GetBytes());
+            
 
             EntangleLogger.Log($"Sent level change message to {sender}!");
             EntangleLogger.Log($"Is host: {SteamIntegration.isHost}");
@@ -107,6 +105,10 @@ namespace Entanglement.Network {
 
             NetworkMessage idMessage = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Registration, idMessageData);
             NetworkSender.BroadcastMessage(idMessage.GetBytes(), SendType.Reliable);
+
+            LevelChangeMessageData levelChangeData = new LevelChangeMessageData() { sceneIndex = (byte) StressLevelZero.Utilities.BoneworksSceneManager.currentSceneIndex };
+            NetworkMessage levelChangeMessage = NetworkMessage.CreateMessage(BuiltInMessageType.LevelChange, levelChangeData);
+            Node.activeNode.SendMessage(sender, SendType.Reliable, levelChangeMessage.GetBytes());
         }
     }
 
