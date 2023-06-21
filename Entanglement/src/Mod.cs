@@ -173,12 +173,31 @@ namespace Entanglement {
             //DiscordIntegration.Tick();
         }
 
+        private ulong? id = null;
         public override void OnGUI() {
             // TODO: temporary ui until we create lobby system
+
+            int offset = 0;
+            int offsetBetweenButtons = 5;
+            int defaultOffset = 10;
             
-            /*if (GUI.Button(new Rect(10, 10, 150, 100), "Connect")) {
-                EntangleLogger.Log("You clicked the button!");
-            }*/
+            GUI.Label(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),"steam id");
+            offset += 20;
+            
+            string text = GUI.TextField(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),"");
+            offset += 20;
+            
+            try {
+                id = ulong.Parse(text);
+            }
+            catch { }
+            
+            if (GUI.Button(new Rect(10, defaultOffset+20/2+offset+offsetBetweenButtons, 200, 20), "Connect")) {
+                EntangleLogger.Log("trying to connect...");
+                if (id != null)
+                    Client.ConnectToServer((ulong)id);
+            }
+            offset += 20;
         }
         
         public override void OnSceneWasInitialized(int buildIndex, string sceneName) {
