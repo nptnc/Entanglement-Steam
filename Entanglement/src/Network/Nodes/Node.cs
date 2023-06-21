@@ -46,9 +46,10 @@ namespace Entanglement.Network {
 
         public static void CreatePlayerRep(PlayerId playerId)
         {
-            if (PlayerIds.GetPlayerFromLargeId(playerId.LargeId) != null)
+            if (PlayerRepresentation.representations.ContainsKey(playerId.LargeId)) {
                 return;
-
+            }
+            EntangleLogger.Log("Creating player rep...");
             PlayerRepresentation.representations.Add(playerId.LargeId, new PlayerRepresentation(playerId.Username, playerId.LargeId));
             EntangleNotif.PlayerJoin($"{playerId.Username}");
         }
