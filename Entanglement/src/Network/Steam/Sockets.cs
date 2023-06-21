@@ -33,9 +33,9 @@ namespace Entanglement.src.Network.Steam
 
         public override void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
-            base.OnMessage(connection,identity,data,size,messageNum,recvTime,channel);
             
             if (!NetworkSender.connections.ContainsKey(identity.steamid)) {
+                EntangleLogger.Log($"Received message from steam ID: {identity.steamid}, caching their connection", ConsoleColor.Magenta);
                 NetworkSender.connections.Add(identity.steamid, connection);
             }
             
@@ -54,6 +54,9 @@ namespace Entanglement.src.Network.Steam
                 message.messageData[b - sizeof(byte)] = messageData[b];
 
             NetworkMessage.ReadMessage(message, identity.steamid, true);
+
+            base.OnMessage(connection, identity, data, size, messageNum, recvTime, channel);
+
         }
     }
 
@@ -87,7 +90,7 @@ namespace Entanglement.src.Network.Steam
 
         public override void OnMessage(IntPtr olddata, int size, Int64 messageNum, Int64 recvTime, int channel)
         {
-            base.OnMessage(olddata,size,messageNum,recvTime,channel);
+            
             
             var data = new byte[size];
             Marshal.Copy(olddata, data, 0, size);
@@ -104,6 +107,8 @@ namespace Entanglement.src.Network.Steam
                 message.messageData[b - sizeof(byte)] = data[b];
 
             NetworkMessage.ReadMessage(message, 0, false);
+
+            base.OnMessage(olddata, size, messageNum, recvTime, channel);
         }
     }
 }

@@ -82,6 +82,7 @@ namespace Entanglement.Network {
             Node.activeNode.SendMessage(sender, SendType.Reliable, levelChangeMessage.GetBytes());
 
             EntangleLogger.Log($"Sent level change message to {sender}!");
+            EntangleLogger.Log($"Is host: {SteamIntegration.isHost}");
 
             foreach (PlayerId playerId in PlayerIds.playerIds)
             {

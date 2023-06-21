@@ -38,6 +38,9 @@ namespace Entanglement.Network
                 EntangleLogger.Error("Already in a server!");
                 return;
             }
+            SteamIntegration.isHost = true;
+            SteamIntegration.hasServer = true;
+
             NetworkSender.serverSocket = SteamNetworkingSockets.CreateRelaySocket<ServerSocket>();
             ConnectToServer(SteamClient.SteamId);
 
@@ -55,8 +58,7 @@ namespace Entanglement.Network
         //
 
         private Server() {
-            SteamIntegration.isHost = true;
-            SteamIntegration.hasServer = true;
+            
         }
 
         public void Tick() {
