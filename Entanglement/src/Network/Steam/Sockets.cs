@@ -15,6 +15,7 @@ namespace Entanglement.src.Network.Steam
         public override void OnConnecting(Connection connection, ConnectionInfo info)
         {
             EntangleLogger.Log("Connecting to socket servers...");
+            base.OnConnecting(connection,info);
         }
 
         public override void OnConnected(Connection connection, ConnectionInfo info)
@@ -22,15 +23,18 @@ namespace Entanglement.src.Network.Steam
             EntangleLogger.Log("Socket is up!");
             SteamIntegration.isHost = true;
             SteamIntegration.hasServer = true;
+            base.OnConnected(connection,info);
         }
 
         public override void OnDisconnected(Connection connection, ConnectionInfo info)
         {
-            
+            base.OnDisconnected(connection,info);
         }
 
         public override void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum, long recvTime, int channel)
         {
+            base.OnMessage(connection,identity,data,size,messageNum,recvTime,channel);
+            
             if (!NetworkSender.connections.ContainsKey(identity.steamid)) {
                 NetworkSender.connections.Add(identity.steamid, connection);
             }
@@ -57,7 +61,7 @@ namespace Entanglement.src.Network.Steam
 
         public override void OnConnecting(ConnectionInfo data)
         {
-
+            base.OnConnecting(data);
         }
 
         public override void OnConnected(ConnectionInfo data)
@@ -73,15 +77,18 @@ namespace Entanglement.src.Network.Steam
             NetworkSender.SendMessageToServer(SendType.Reliable, conMsg.GetBytes());
 
             EntangleLogger.Log("Connected as client to server socket! Connection info sent");
+            base.OnConnected(data);
         }
 
         public override void OnDisconnected(ConnectionInfo data)
         {
-            
+            base.OnDisconnected(data);
         }
 
         public override void OnMessage(IntPtr olddata, int size, Int64 messageNum, Int64 recvTime, int channel)
         {
+            base.OnMessage(olddata,size,messageNum,recvTime,channel);
+            
             var data = new byte[size];
             Marshal.Copy(olddata, data, 0, size);
 

@@ -197,6 +197,12 @@ namespace Entanglement {
                 if (id != null)
                     Client.ConnectToServer((ulong)id);
             }
+            offset += 20+30;
+
+            GUI.Label(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),"your steam id");
+            offset += 20;
+            
+            GUI.TextField(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),SteamClient.SteamId.ToString());
             offset += 20;
         }
         
