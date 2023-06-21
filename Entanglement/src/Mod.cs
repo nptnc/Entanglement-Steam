@@ -174,6 +174,7 @@ namespace Entanglement {
         }
 
         private ulong? id = null;
+        private string idString = "";
         public override void OnGUI() {
             // TODO: temporary ui until we create lobby system
 
@@ -184,11 +185,11 @@ namespace Entanglement {
             GUI.Label(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),"steam id");
             offset += 20;
             
-            string text = GUI.TextField(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),"");
+            idString = GUI.TextField(new Rect(10,defaultOffset + offset + 20/2 + offsetBetweenButtons,200,20),idString);
             offset += 20;
             
             try {
-                id = ulong.Parse(text);
+                id = ulong.Parse(idString);
             }
             catch { }
             
