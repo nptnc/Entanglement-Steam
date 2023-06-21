@@ -76,7 +76,7 @@ namespace Entanglement.src.Network.Steam
             NetworkMessage conMsg = NetworkMessage.CreateMessage((byte) BuiltInMessageType.Connection, connectionData);
             NetworkSender.SendMessageToServer(SendType.Reliable, conMsg.GetBytes());
 
-            EntangleLogger.Log("Connected as client to server socket! Connection info sent",ConsoleColor.Magenta);
+            EntangleLogger.Log("Connected as client to server socket! Connection info sent",ConsoleColor.Blue);
             base.OnConnected(data);
         }
 
