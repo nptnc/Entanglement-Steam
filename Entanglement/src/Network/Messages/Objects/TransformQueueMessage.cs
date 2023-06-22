@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Entanglement.Data;
 using Entanglement.Extensions;
 using Entanglement.Objects;
+using Entanglement.src.Network;
 using Steamworks.Data;
 
 namespace Entanglement.Network
@@ -28,7 +29,6 @@ namespace Entanglement.Network
             message.messageData = message.messageData.AddBytes(BitConverter.GetBytes(data.objectId), ref index);
 
             message.messageData[index++] = Convert.ToByte(data.isAdd);
-
             return message;
         }
 
@@ -50,6 +50,8 @@ namespace Entanglement.Network
             ushort objectId = BitConverter.ToUInt16(message.messageData, index);
             index += sizeof(ushort);
 
+            EntangleLogger.Log("Received object queue on client",ConsoleColor.Blue);
+            
             if (ObjectSync.TryGetSyncable(objectId, out Syncable syncable)) {
                 bool isAdd = Convert.ToBoolean(message.messageData[index++]);
 
